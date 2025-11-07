@@ -1,10 +1,2637 @@
 {
   "openapi": "3.0.1",
   "info": {
-    "title": "Server",
-    "version": "1.0"
+    "title": "🏠 HomeTaskManagement API",
+    "description": "API for family task management (OData + JWT + DTO)\n\n📘 **OData supported:** `$filter`, `$orderby`, `$select`, `$top`, `$skip`, `$count`\n\n🧩 Examples:\n- `/api/Families?$orderby=CreatedAt desc`\n- `/api/Families?$filter=Address eq 'Hanoi'`\n- `/api/Tasks?$filter=Status eq 'Pending'`",
+    "version": "v1"
   },
   "paths": {
+    "/api/Auth/register": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json;odata.metadata=minimal;odata.streaming=true": {
+              "schema": {
+                "$ref": "#/components/schemas/RegisterRequest"
+              }
+            },
+            "application/json;odata.metadata=minimal;odata.streaming=false": {
+              "schema": {
+                "$ref": "#/components/schemas/RegisterRequest"
+              }
+            },
+            "application/json;odata.metadata=minimal": {
+              "schema": {
+                "$ref": "#/components/schemas/RegisterRequest"
+              }
+            },
+            "application/json;odata.metadata=full;odata.streaming=true": {
+              "schema": {
+                "$ref": "#/components/schemas/RegisterRequest"
+              }
+            },
+            "application/json;odata.metadata=full;odata.streaming=false": {
+              "schema": {
+                "$ref": "#/components/schemas/RegisterRequest"
+              }
+            },
+            "application/json;odata.metadata=full": {
+              "schema": {
+                "$ref": "#/components/schemas/RegisterRequest"
+              }
+            },
+            "application/json;odata.metadata=none;odata.streaming=true": {
+              "schema": {
+                "$ref": "#/components/schemas/RegisterRequest"
+              }
+            },
+            "application/json;odata.metadata=none;odata.streaming=false": {
+              "schema": {
+                "$ref": "#/components/schemas/RegisterRequest"
+              }
+            },
+            "application/json;odata.metadata=none": {
+              "schema": {
+                "$ref": "#/components/schemas/RegisterRequest"
+              }
+            },
+            "application/json;odata.streaming=true": {
+              "schema": {
+                "$ref": "#/components/schemas/RegisterRequest"
+              }
+            },
+            "application/json;odata.streaming=false": {
+              "schema": {
+                "$ref": "#/components/schemas/RegisterRequest"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegisterRequest"
+              }
+            },
+            "application/json;odata.metadata=minimal;odata.streaming=true;IEEE754Compatible=false": {
+              "schema": {
+                "$ref": "#/components/schemas/RegisterRequest"
+              }
+            },
+            "application/json;odata.metadata=minimal;odata.streaming=true;IEEE754Compatible=true": {
+              "schema": {
+                "$ref": "#/components/schemas/RegisterRequest"
+              }
+            },
+            "application/json;odata.metadata=minimal;odata.streaming=false;IEEE754Compatible=false": {
+              "schema": {
+                "$ref": "#/components/schemas/RegisterRequest"
+              }
+            },
+            "application/json;odata.metadata=minimal;odata.streaming=false;IEEE754Compatible=true": {
+              "schema": {
+                "$ref": "#/components/schemas/RegisterRequest"
+              }
+            },
+            "application/json;odata.metadata=minimal;IEEE754Compatible=false": {
+              "schema": {
+                "$ref": "#/components/schemas/RegisterRequest"
+              }
+            },
+            "application/json;odata.metadata=minimal;IEEE754Compatible=true": {
+              "schema": {
+                "$ref": "#/components/schemas/RegisterRequest"
+              }
+            },
+            "application/json;odata.metadata=full;odata.streaming=true;IEEE754Compatible=false": {
+              "schema": {
+                "$ref": "#/components/schemas/RegisterRequest"
+              }
+            },
+            "application/json;odata.metadata=full;odata.streaming=true;IEEE754Compatible=true": {
+              "schema": {
+                "$ref": "#/components/schemas/RegisterRequest"
+              }
+            },
+            "application/json;odata.metadata=full;odata.streaming=false;IEEE754Compatible=false": {
+              "schema": {
+                "$ref": "#/components/schemas/RegisterRequest"
+              }
+            },
+            "application/json;odata.metadata=full;odata.streaming=false;IEEE754Compatible=true": {
+              "schema": {
+                "$ref": "#/components/schemas/RegisterRequest"
+              }
+            },
+            "application/json;odata.metadata=full;IEEE754Compatible=false": {
+              "schema": {
+                "$ref": "#/components/schemas/RegisterRequest"
+              }
+            },
+            "application/json;odata.metadata=full;IEEE754Compatible=true": {
+              "schema": {
+                "$ref": "#/components/schemas/RegisterRequest"
+              }
+            },
+            "application/json;odata.metadata=none;odata.streaming=true;IEEE754Compatible=false": {
+              "schema": {
+                "$ref": "#/components/schemas/RegisterRequest"
+              }
+            },
+            "application/json;odata.metadata=none;odata.streaming=true;IEEE754Compatible=true": {
+              "schema": {
+                "$ref": "#/components/schemas/RegisterRequest"
+              }
+            },
+            "application/json;odata.metadata=none;odata.streaming=false;IEEE754Compatible=true": {
+              "schema": {
+                "$ref": "#/components/schemas/RegisterRequest"
+              }
+            },
+            "application/json;odata.metadata=none;odata.streaming=false;IEEE754Compatible=false": {
+              "schema": {
+                "$ref": "#/components/schemas/RegisterRequest"
+              }
+            },
+            "application/json;odata.metadata=none;IEEE754Compatible=false": {
+              "schema": {
+                "$ref": "#/components/schemas/RegisterRequest"
+              }
+            },
+            "application/json;odata.metadata=none;IEEE754Compatible=true": {
+              "schema": {
+                "$ref": "#/components/schemas/RegisterRequest"
+              }
+            },
+            "application/json;odata.streaming=true;IEEE754Compatible=false": {
+              "schema": {
+                "$ref": "#/components/schemas/RegisterRequest"
+              }
+            },
+            "application/json;odata.streaming=true;IEEE754Compatible=true": {
+              "schema": {
+                "$ref": "#/components/schemas/RegisterRequest"
+              }
+            },
+            "application/json;odata.streaming=false;IEEE754Compatible=false": {
+              "schema": {
+                "$ref": "#/components/schemas/RegisterRequest"
+              }
+            },
+            "application/json;odata.streaming=false;IEEE754Compatible=true": {
+              "schema": {
+                "$ref": "#/components/schemas/RegisterRequest"
+              }
+            },
+            "application/json;IEEE754Compatible=false": {
+              "schema": {
+                "$ref": "#/components/schemas/RegisterRequest"
+              }
+            },
+            "application/json;IEEE754Compatible=true": {
+              "schema": {
+                "$ref": "#/components/schemas/RegisterRequest"
+              }
+            },
+            "application/xml": {
+              "schema": {
+                "$ref": "#/components/schemas/RegisterRequest"
+              }
+            },
+            "text/plain": {
+              "schema": {
+                "$ref": "#/components/schemas/RegisterRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegisterRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegisterRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Auth/login": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json;odata.metadata=minimal;odata.streaming=true": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginRequest"
+              }
+            },
+            "application/json;odata.metadata=minimal;odata.streaming=false": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginRequest"
+              }
+            },
+            "application/json;odata.metadata=minimal": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginRequest"
+              }
+            },
+            "application/json;odata.metadata=full;odata.streaming=true": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginRequest"
+              }
+            },
+            "application/json;odata.metadata=full;odata.streaming=false": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginRequest"
+              }
+            },
+            "application/json;odata.metadata=full": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginRequest"
+              }
+            },
+            "application/json;odata.metadata=none;odata.streaming=true": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginRequest"
+              }
+            },
+            "application/json;odata.metadata=none;odata.streaming=false": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginRequest"
+              }
+            },
+            "application/json;odata.metadata=none": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginRequest"
+              }
+            },
+            "application/json;odata.streaming=true": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginRequest"
+              }
+            },
+            "application/json;odata.streaming=false": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginRequest"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginRequest"
+              }
+            },
+            "application/json;odata.metadata=minimal;odata.streaming=true;IEEE754Compatible=false": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginRequest"
+              }
+            },
+            "application/json;odata.metadata=minimal;odata.streaming=true;IEEE754Compatible=true": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginRequest"
+              }
+            },
+            "application/json;odata.metadata=minimal;odata.streaming=false;IEEE754Compatible=false": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginRequest"
+              }
+            },
+            "application/json;odata.metadata=minimal;odata.streaming=false;IEEE754Compatible=true": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginRequest"
+              }
+            },
+            "application/json;odata.metadata=minimal;IEEE754Compatible=false": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginRequest"
+              }
+            },
+            "application/json;odata.metadata=minimal;IEEE754Compatible=true": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginRequest"
+              }
+            },
+            "application/json;odata.metadata=full;odata.streaming=true;IEEE754Compatible=false": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginRequest"
+              }
+            },
+            "application/json;odata.metadata=full;odata.streaming=true;IEEE754Compatible=true": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginRequest"
+              }
+            },
+            "application/json;odata.metadata=full;odata.streaming=false;IEEE754Compatible=false": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginRequest"
+              }
+            },
+            "application/json;odata.metadata=full;odata.streaming=false;IEEE754Compatible=true": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginRequest"
+              }
+            },
+            "application/json;odata.metadata=full;IEEE754Compatible=false": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginRequest"
+              }
+            },
+            "application/json;odata.metadata=full;IEEE754Compatible=true": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginRequest"
+              }
+            },
+            "application/json;odata.metadata=none;odata.streaming=true;IEEE754Compatible=false": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginRequest"
+              }
+            },
+            "application/json;odata.metadata=none;odata.streaming=true;IEEE754Compatible=true": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginRequest"
+              }
+            },
+            "application/json;odata.metadata=none;odata.streaming=false;IEEE754Compatible=true": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginRequest"
+              }
+            },
+            "application/json;odata.metadata=none;odata.streaming=false;IEEE754Compatible=false": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginRequest"
+              }
+            },
+            "application/json;odata.metadata=none;IEEE754Compatible=false": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginRequest"
+              }
+            },
+            "application/json;odata.metadata=none;IEEE754Compatible=true": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginRequest"
+              }
+            },
+            "application/json;odata.streaming=true;IEEE754Compatible=false": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginRequest"
+              }
+            },
+            "application/json;odata.streaming=true;IEEE754Compatible=true": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginRequest"
+              }
+            },
+            "application/json;odata.streaming=false;IEEE754Compatible=false": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginRequest"
+              }
+            },
+            "application/json;odata.streaming=false;IEEE754Compatible=true": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginRequest"
+              }
+            },
+            "application/json;IEEE754Compatible=false": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginRequest"
+              }
+            },
+            "application/json;IEEE754Compatible=true": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginRequest"
+              }
+            },
+            "application/xml": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginRequest"
+              }
+            },
+            "text/plain": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Auth/profile": {
+      "get": {
+        "tags": [
+          "Auth"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Families": {
+      "get": {
+        "tags": [
+          "Families"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json;odata.metadata=minimal;odata.streaming=true": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FamilyReadDTO"
+                  }
+                }
+              },
+              "application/json;odata.metadata=minimal;odata.streaming=false": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FamilyReadDTO"
+                  }
+                }
+              },
+              "application/json;odata.metadata=minimal": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FamilyReadDTO"
+                  }
+                }
+              },
+              "application/json;odata.metadata=full;odata.streaming=true": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FamilyReadDTO"
+                  }
+                }
+              },
+              "application/json;odata.metadata=full;odata.streaming=false": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FamilyReadDTO"
+                  }
+                }
+              },
+              "application/json;odata.metadata=full": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FamilyReadDTO"
+                  }
+                }
+              },
+              "application/json;odata.metadata=none;odata.streaming=true": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FamilyReadDTO"
+                  }
+                }
+              },
+              "application/json;odata.metadata=none;odata.streaming=false": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FamilyReadDTO"
+                  }
+                }
+              },
+              "application/json;odata.metadata=none": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FamilyReadDTO"
+                  }
+                }
+              },
+              "application/json;odata.streaming=true": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FamilyReadDTO"
+                  }
+                }
+              },
+              "application/json;odata.streaming=false": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FamilyReadDTO"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FamilyReadDTO"
+                  }
+                }
+              },
+              "application/json;odata.metadata=minimal;odata.streaming=true;IEEE754Compatible=false": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FamilyReadDTO"
+                  }
+                }
+              },
+              "application/json;odata.metadata=minimal;odata.streaming=true;IEEE754Compatible=true": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FamilyReadDTO"
+                  }
+                }
+              },
+              "application/json;odata.metadata=minimal;odata.streaming=false;IEEE754Compatible=false": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FamilyReadDTO"
+                  }
+                }
+              },
+              "application/json;odata.metadata=minimal;odata.streaming=false;IEEE754Compatible=true": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FamilyReadDTO"
+                  }
+                }
+              },
+              "application/json;odata.metadata=minimal;IEEE754Compatible=false": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FamilyReadDTO"
+                  }
+                }
+              },
+              "application/json;odata.metadata=minimal;IEEE754Compatible=true": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FamilyReadDTO"
+                  }
+                }
+              },
+              "application/json;odata.metadata=full;odata.streaming=true;IEEE754Compatible=false": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FamilyReadDTO"
+                  }
+                }
+              },
+              "application/json;odata.metadata=full;odata.streaming=true;IEEE754Compatible=true": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FamilyReadDTO"
+                  }
+                }
+              },
+              "application/json;odata.metadata=full;odata.streaming=false;IEEE754Compatible=false": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FamilyReadDTO"
+                  }
+                }
+              },
+              "application/json;odata.metadata=full;odata.streaming=false;IEEE754Compatible=true": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FamilyReadDTO"
+                  }
+                }
+              },
+              "application/json;odata.metadata=full;IEEE754Compatible=false": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FamilyReadDTO"
+                  }
+                }
+              },
+              "application/json;odata.metadata=full;IEEE754Compatible=true": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FamilyReadDTO"
+                  }
+                }
+              },
+              "application/json;odata.metadata=none;odata.streaming=true;IEEE754Compatible=false": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FamilyReadDTO"
+                  }
+                }
+              },
+              "application/json;odata.metadata=none;odata.streaming=true;IEEE754Compatible=true": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FamilyReadDTO"
+                  }
+                }
+              },
+              "application/json;odata.metadata=none;odata.streaming=false;IEEE754Compatible=true": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FamilyReadDTO"
+                  }
+                }
+              },
+              "application/json;odata.metadata=none;odata.streaming=false;IEEE754Compatible=false": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FamilyReadDTO"
+                  }
+                }
+              },
+              "application/json;odata.metadata=none;IEEE754Compatible=false": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FamilyReadDTO"
+                  }
+                }
+              },
+              "application/json;odata.metadata=none;IEEE754Compatible=true": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FamilyReadDTO"
+                  }
+                }
+              },
+              "application/json;odata.streaming=true;IEEE754Compatible=false": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FamilyReadDTO"
+                  }
+                }
+              },
+              "application/json;odata.streaming=true;IEEE754Compatible=true": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FamilyReadDTO"
+                  }
+                }
+              },
+              "application/json;odata.streaming=false;IEEE754Compatible=false": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FamilyReadDTO"
+                  }
+                }
+              },
+              "application/json;odata.streaming=false;IEEE754Compatible=true": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FamilyReadDTO"
+                  }
+                }
+              },
+              "application/json;IEEE754Compatible=false": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FamilyReadDTO"
+                  }
+                }
+              },
+              "application/json;IEEE754Compatible=true": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FamilyReadDTO"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FamilyReadDTO"
+                  }
+                }
+              },
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FamilyReadDTO"
+                  }
+                }
+              },
+              "application/octet-stream": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FamilyReadDTO"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FamilyReadDTO"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Families"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json;odata.metadata=minimal;odata.streaming=true": {
+              "schema": {
+                "$ref": "#/components/schemas/FamilyCreateDTO"
+              }
+            },
+            "application/json;odata.metadata=minimal;odata.streaming=false": {
+              "schema": {
+                "$ref": "#/components/schemas/FamilyCreateDTO"
+              }
+            },
+            "application/json;odata.metadata=minimal": {
+              "schema": {
+                "$ref": "#/components/schemas/FamilyCreateDTO"
+              }
+            },
+            "application/json;odata.metadata=full;odata.streaming=true": {
+              "schema": {
+                "$ref": "#/components/schemas/FamilyCreateDTO"
+              }
+            },
+            "application/json;odata.metadata=full;odata.streaming=false": {
+              "schema": {
+                "$ref": "#/components/schemas/FamilyCreateDTO"
+              }
+            },
+            "application/json;odata.metadata=full": {
+              "schema": {
+                "$ref": "#/components/schemas/FamilyCreateDTO"
+              }
+            },
+            "application/json;odata.metadata=none;odata.streaming=true": {
+              "schema": {
+                "$ref": "#/components/schemas/FamilyCreateDTO"
+              }
+            },
+            "application/json;odata.metadata=none;odata.streaming=false": {
+              "schema": {
+                "$ref": "#/components/schemas/FamilyCreateDTO"
+              }
+            },
+            "application/json;odata.metadata=none": {
+              "schema": {
+                "$ref": "#/components/schemas/FamilyCreateDTO"
+              }
+            },
+            "application/json;odata.streaming=true": {
+              "schema": {
+                "$ref": "#/components/schemas/FamilyCreateDTO"
+              }
+            },
+            "application/json;odata.streaming=false": {
+              "schema": {
+                "$ref": "#/components/schemas/FamilyCreateDTO"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FamilyCreateDTO"
+              }
+            },
+            "application/json;odata.metadata=minimal;odata.streaming=true;IEEE754Compatible=false": {
+              "schema": {
+                "$ref": "#/components/schemas/FamilyCreateDTO"
+              }
+            },
+            "application/json;odata.metadata=minimal;odata.streaming=true;IEEE754Compatible=true": {
+              "schema": {
+                "$ref": "#/components/schemas/FamilyCreateDTO"
+              }
+            },
+            "application/json;odata.metadata=minimal;odata.streaming=false;IEEE754Compatible=false": {
+              "schema": {
+                "$ref": "#/components/schemas/FamilyCreateDTO"
+              }
+            },
+            "application/json;odata.metadata=minimal;odata.streaming=false;IEEE754Compatible=true": {
+              "schema": {
+                "$ref": "#/components/schemas/FamilyCreateDTO"
+              }
+            },
+            "application/json;odata.metadata=minimal;IEEE754Compatible=false": {
+              "schema": {
+                "$ref": "#/components/schemas/FamilyCreateDTO"
+              }
+            },
+            "application/json;odata.metadata=minimal;IEEE754Compatible=true": {
+              "schema": {
+                "$ref": "#/components/schemas/FamilyCreateDTO"
+              }
+            },
+            "application/json;odata.metadata=full;odata.streaming=true;IEEE754Compatible=false": {
+              "schema": {
+                "$ref": "#/components/schemas/FamilyCreateDTO"
+              }
+            },
+            "application/json;odata.metadata=full;odata.streaming=true;IEEE754Compatible=true": {
+              "schema": {
+                "$ref": "#/components/schemas/FamilyCreateDTO"
+              }
+            },
+            "application/json;odata.metadata=full;odata.streaming=false;IEEE754Compatible=false": {
+              "schema": {
+                "$ref": "#/components/schemas/FamilyCreateDTO"
+              }
+            },
+            "application/json;odata.metadata=full;odata.streaming=false;IEEE754Compatible=true": {
+              "schema": {
+                "$ref": "#/components/schemas/FamilyCreateDTO"
+              }
+            },
+            "application/json;odata.metadata=full;IEEE754Compatible=false": {
+              "schema": {
+                "$ref": "#/components/schemas/FamilyCreateDTO"
+              }
+            },
+            "application/json;odata.metadata=full;IEEE754Compatible=true": {
+              "schema": {
+                "$ref": "#/components/schemas/FamilyCreateDTO"
+              }
+            },
+            "application/json;odata.metadata=none;odata.streaming=true;IEEE754Compatible=false": {
+              "schema": {
+                "$ref": "#/components/schemas/FamilyCreateDTO"
+              }
+            },
+            "application/json;odata.metadata=none;odata.streaming=true;IEEE754Compatible=true": {
+              "schema": {
+                "$ref": "#/components/schemas/FamilyCreateDTO"
+              }
+            },
+            "application/json;odata.metadata=none;odata.streaming=false;IEEE754Compatible=true": {
+              "schema": {
+                "$ref": "#/components/schemas/FamilyCreateDTO"
+              }
+            },
+            "application/json;odata.metadata=none;odata.streaming=false;IEEE754Compatible=false": {
+              "schema": {
+                "$ref": "#/components/schemas/FamilyCreateDTO"
+              }
+            },
+            "application/json;odata.metadata=none;IEEE754Compatible=false": {
+              "schema": {
+                "$ref": "#/components/schemas/FamilyCreateDTO"
+              }
+            },
+            "application/json;odata.metadata=none;IEEE754Compatible=true": {
+              "schema": {
+                "$ref": "#/components/schemas/FamilyCreateDTO"
+              }
+            },
+            "application/json;odata.streaming=true;IEEE754Compatible=false": {
+              "schema": {
+                "$ref": "#/components/schemas/FamilyCreateDTO"
+              }
+            },
+            "application/json;odata.streaming=true;IEEE754Compatible=true": {
+              "schema": {
+                "$ref": "#/components/schemas/FamilyCreateDTO"
+              }
+            },
+            "application/json;odata.streaming=false;IEEE754Compatible=false": {
+              "schema": {
+                "$ref": "#/components/schemas/FamilyCreateDTO"
+              }
+            },
+            "application/json;odata.streaming=false;IEEE754Compatible=true": {
+              "schema": {
+                "$ref": "#/components/schemas/FamilyCreateDTO"
+              }
+            },
+            "application/json;IEEE754Compatible=false": {
+              "schema": {
+                "$ref": "#/components/schemas/FamilyCreateDTO"
+              }
+            },
+            "application/json;IEEE754Compatible=true": {
+              "schema": {
+                "$ref": "#/components/schemas/FamilyCreateDTO"
+              }
+            },
+            "application/xml": {
+              "schema": {
+                "$ref": "#/components/schemas/FamilyCreateDTO"
+              }
+            },
+            "text/plain": {
+              "schema": {
+                "$ref": "#/components/schemas/FamilyCreateDTO"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FamilyCreateDTO"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/FamilyCreateDTO"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Families/myfamilies": {
+      "get": {
+        "tags": [
+          "Families"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json;odata.metadata=minimal;odata.streaming=true": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FamilyReadDTO"
+                  }
+                }
+              },
+              "application/json;odata.metadata=minimal;odata.streaming=false": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FamilyReadDTO"
+                  }
+                }
+              },
+              "application/json;odata.metadata=minimal": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FamilyReadDTO"
+                  }
+                }
+              },
+              "application/json;odata.metadata=full;odata.streaming=true": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FamilyReadDTO"
+                  }
+                }
+              },
+              "application/json;odata.metadata=full;odata.streaming=false": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FamilyReadDTO"
+                  }
+                }
+              },
+              "application/json;odata.metadata=full": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FamilyReadDTO"
+                  }
+                }
+              },
+              "application/json;odata.metadata=none;odata.streaming=true": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FamilyReadDTO"
+                  }
+                }
+              },
+              "application/json;odata.metadata=none;odata.streaming=false": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FamilyReadDTO"
+                  }
+                }
+              },
+              "application/json;odata.metadata=none": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FamilyReadDTO"
+                  }
+                }
+              },
+              "application/json;odata.streaming=true": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FamilyReadDTO"
+                  }
+                }
+              },
+              "application/json;odata.streaming=false": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FamilyReadDTO"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FamilyReadDTO"
+                  }
+                }
+              },
+              "application/json;odata.metadata=minimal;odata.streaming=true;IEEE754Compatible=false": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FamilyReadDTO"
+                  }
+                }
+              },
+              "application/json;odata.metadata=minimal;odata.streaming=true;IEEE754Compatible=true": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FamilyReadDTO"
+                  }
+                }
+              },
+              "application/json;odata.metadata=minimal;odata.streaming=false;IEEE754Compatible=false": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FamilyReadDTO"
+                  }
+                }
+              },
+              "application/json;odata.metadata=minimal;odata.streaming=false;IEEE754Compatible=true": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FamilyReadDTO"
+                  }
+                }
+              },
+              "application/json;odata.metadata=minimal;IEEE754Compatible=false": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FamilyReadDTO"
+                  }
+                }
+              },
+              "application/json;odata.metadata=minimal;IEEE754Compatible=true": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FamilyReadDTO"
+                  }
+                }
+              },
+              "application/json;odata.metadata=full;odata.streaming=true;IEEE754Compatible=false": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FamilyReadDTO"
+                  }
+                }
+              },
+              "application/json;odata.metadata=full;odata.streaming=true;IEEE754Compatible=true": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FamilyReadDTO"
+                  }
+                }
+              },
+              "application/json;odata.metadata=full;odata.streaming=false;IEEE754Compatible=false": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FamilyReadDTO"
+                  }
+                }
+              },
+              "application/json;odata.metadata=full;odata.streaming=false;IEEE754Compatible=true": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FamilyReadDTO"
+                  }
+                }
+              },
+              "application/json;odata.metadata=full;IEEE754Compatible=false": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FamilyReadDTO"
+                  }
+                }
+              },
+              "application/json;odata.metadata=full;IEEE754Compatible=true": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FamilyReadDTO"
+                  }
+                }
+              },
+              "application/json;odata.metadata=none;odata.streaming=true;IEEE754Compatible=false": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FamilyReadDTO"
+                  }
+                }
+              },
+              "application/json;odata.metadata=none;odata.streaming=true;IEEE754Compatible=true": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FamilyReadDTO"
+                  }
+                }
+              },
+              "application/json;odata.metadata=none;odata.streaming=false;IEEE754Compatible=true": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FamilyReadDTO"
+                  }
+                }
+              },
+              "application/json;odata.metadata=none;odata.streaming=false;IEEE754Compatible=false": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FamilyReadDTO"
+                  }
+                }
+              },
+              "application/json;odata.metadata=none;IEEE754Compatible=false": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FamilyReadDTO"
+                  }
+                }
+              },
+              "application/json;odata.metadata=none;IEEE754Compatible=true": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FamilyReadDTO"
+                  }
+                }
+              },
+              "application/json;odata.streaming=true;IEEE754Compatible=false": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FamilyReadDTO"
+                  }
+                }
+              },
+              "application/json;odata.streaming=true;IEEE754Compatible=true": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FamilyReadDTO"
+                  }
+                }
+              },
+              "application/json;odata.streaming=false;IEEE754Compatible=false": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FamilyReadDTO"
+                  }
+                }
+              },
+              "application/json;odata.streaming=false;IEEE754Compatible=true": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FamilyReadDTO"
+                  }
+                }
+              },
+              "application/json;IEEE754Compatible=false": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FamilyReadDTO"
+                  }
+                }
+              },
+              "application/json;IEEE754Compatible=true": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FamilyReadDTO"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FamilyReadDTO"
+                  }
+                }
+              },
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FamilyReadDTO"
+                  }
+                }
+              },
+              "application/octet-stream": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FamilyReadDTO"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FamilyReadDTO"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Families/{id}": {
+      "put": {
+        "tags": [
+          "Families"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json;odata.metadata=minimal;odata.streaming=true": {
+              "schema": {
+                "$ref": "#/components/schemas/FamilyUpdateDTO"
+              }
+            },
+            "application/json;odata.metadata=minimal;odata.streaming=false": {
+              "schema": {
+                "$ref": "#/components/schemas/FamilyUpdateDTO"
+              }
+            },
+            "application/json;odata.metadata=minimal": {
+              "schema": {
+                "$ref": "#/components/schemas/FamilyUpdateDTO"
+              }
+            },
+            "application/json;odata.metadata=full;odata.streaming=true": {
+              "schema": {
+                "$ref": "#/components/schemas/FamilyUpdateDTO"
+              }
+            },
+            "application/json;odata.metadata=full;odata.streaming=false": {
+              "schema": {
+                "$ref": "#/components/schemas/FamilyUpdateDTO"
+              }
+            },
+            "application/json;odata.metadata=full": {
+              "schema": {
+                "$ref": "#/components/schemas/FamilyUpdateDTO"
+              }
+            },
+            "application/json;odata.metadata=none;odata.streaming=true": {
+              "schema": {
+                "$ref": "#/components/schemas/FamilyUpdateDTO"
+              }
+            },
+            "application/json;odata.metadata=none;odata.streaming=false": {
+              "schema": {
+                "$ref": "#/components/schemas/FamilyUpdateDTO"
+              }
+            },
+            "application/json;odata.metadata=none": {
+              "schema": {
+                "$ref": "#/components/schemas/FamilyUpdateDTO"
+              }
+            },
+            "application/json;odata.streaming=true": {
+              "schema": {
+                "$ref": "#/components/schemas/FamilyUpdateDTO"
+              }
+            },
+            "application/json;odata.streaming=false": {
+              "schema": {
+                "$ref": "#/components/schemas/FamilyUpdateDTO"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FamilyUpdateDTO"
+              }
+            },
+            "application/json;odata.metadata=minimal;odata.streaming=true;IEEE754Compatible=false": {
+              "schema": {
+                "$ref": "#/components/schemas/FamilyUpdateDTO"
+              }
+            },
+            "application/json;odata.metadata=minimal;odata.streaming=true;IEEE754Compatible=true": {
+              "schema": {
+                "$ref": "#/components/schemas/FamilyUpdateDTO"
+              }
+            },
+            "application/json;odata.metadata=minimal;odata.streaming=false;IEEE754Compatible=false": {
+              "schema": {
+                "$ref": "#/components/schemas/FamilyUpdateDTO"
+              }
+            },
+            "application/json;odata.metadata=minimal;odata.streaming=false;IEEE754Compatible=true": {
+              "schema": {
+                "$ref": "#/components/schemas/FamilyUpdateDTO"
+              }
+            },
+            "application/json;odata.metadata=minimal;IEEE754Compatible=false": {
+              "schema": {
+                "$ref": "#/components/schemas/FamilyUpdateDTO"
+              }
+            },
+            "application/json;odata.metadata=minimal;IEEE754Compatible=true": {
+              "schema": {
+                "$ref": "#/components/schemas/FamilyUpdateDTO"
+              }
+            },
+            "application/json;odata.metadata=full;odata.streaming=true;IEEE754Compatible=false": {
+              "schema": {
+                "$ref": "#/components/schemas/FamilyUpdateDTO"
+              }
+            },
+            "application/json;odata.metadata=full;odata.streaming=true;IEEE754Compatible=true": {
+              "schema": {
+                "$ref": "#/components/schemas/FamilyUpdateDTO"
+              }
+            },
+            "application/json;odata.metadata=full;odata.streaming=false;IEEE754Compatible=false": {
+              "schema": {
+                "$ref": "#/components/schemas/FamilyUpdateDTO"
+              }
+            },
+            "application/json;odata.metadata=full;odata.streaming=false;IEEE754Compatible=true": {
+              "schema": {
+                "$ref": "#/components/schemas/FamilyUpdateDTO"
+              }
+            },
+            "application/json;odata.metadata=full;IEEE754Compatible=false": {
+              "schema": {
+                "$ref": "#/components/schemas/FamilyUpdateDTO"
+              }
+            },
+            "application/json;odata.metadata=full;IEEE754Compatible=true": {
+              "schema": {
+                "$ref": "#/components/schemas/FamilyUpdateDTO"
+              }
+            },
+            "application/json;odata.metadata=none;odata.streaming=true;IEEE754Compatible=false": {
+              "schema": {
+                "$ref": "#/components/schemas/FamilyUpdateDTO"
+              }
+            },
+            "application/json;odata.metadata=none;odata.streaming=true;IEEE754Compatible=true": {
+              "schema": {
+                "$ref": "#/components/schemas/FamilyUpdateDTO"
+              }
+            },
+            "application/json;odata.metadata=none;odata.streaming=false;IEEE754Compatible=true": {
+              "schema": {
+                "$ref": "#/components/schemas/FamilyUpdateDTO"
+              }
+            },
+            "application/json;odata.metadata=none;odata.streaming=false;IEEE754Compatible=false": {
+              "schema": {
+                "$ref": "#/components/schemas/FamilyUpdateDTO"
+              }
+            },
+            "application/json;odata.metadata=none;IEEE754Compatible=false": {
+              "schema": {
+                "$ref": "#/components/schemas/FamilyUpdateDTO"
+              }
+            },
+            "application/json;odata.metadata=none;IEEE754Compatible=true": {
+              "schema": {
+                "$ref": "#/components/schemas/FamilyUpdateDTO"
+              }
+            },
+            "application/json;odata.streaming=true;IEEE754Compatible=false": {
+              "schema": {
+                "$ref": "#/components/schemas/FamilyUpdateDTO"
+              }
+            },
+            "application/json;odata.streaming=true;IEEE754Compatible=true": {
+              "schema": {
+                "$ref": "#/components/schemas/FamilyUpdateDTO"
+              }
+            },
+            "application/json;odata.streaming=false;IEEE754Compatible=false": {
+              "schema": {
+                "$ref": "#/components/schemas/FamilyUpdateDTO"
+              }
+            },
+            "application/json;odata.streaming=false;IEEE754Compatible=true": {
+              "schema": {
+                "$ref": "#/components/schemas/FamilyUpdateDTO"
+              }
+            },
+            "application/json;IEEE754Compatible=false": {
+              "schema": {
+                "$ref": "#/components/schemas/FamilyUpdateDTO"
+              }
+            },
+            "application/json;IEEE754Compatible=true": {
+              "schema": {
+                "$ref": "#/components/schemas/FamilyUpdateDTO"
+              }
+            },
+            "application/xml": {
+              "schema": {
+                "$ref": "#/components/schemas/FamilyUpdateDTO"
+              }
+            },
+            "text/plain": {
+              "schema": {
+                "$ref": "#/components/schemas/FamilyUpdateDTO"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FamilyUpdateDTO"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/FamilyUpdateDTO"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Families"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/FamilyMembers/myfamily": {
+      "get": {
+        "tags": [
+          "FamilyMembers"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json;odata.metadata=minimal;odata.streaming=true": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FamilyMemberReadDTO"
+                  }
+                }
+              },
+              "application/json;odata.metadata=minimal;odata.streaming=false": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FamilyMemberReadDTO"
+                  }
+                }
+              },
+              "application/json;odata.metadata=minimal": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FamilyMemberReadDTO"
+                  }
+                }
+              },
+              "application/json;odata.metadata=full;odata.streaming=true": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FamilyMemberReadDTO"
+                  }
+                }
+              },
+              "application/json;odata.metadata=full;odata.streaming=false": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FamilyMemberReadDTO"
+                  }
+                }
+              },
+              "application/json;odata.metadata=full": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FamilyMemberReadDTO"
+                  }
+                }
+              },
+              "application/json;odata.metadata=none;odata.streaming=true": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FamilyMemberReadDTO"
+                  }
+                }
+              },
+              "application/json;odata.metadata=none;odata.streaming=false": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FamilyMemberReadDTO"
+                  }
+                }
+              },
+              "application/json;odata.metadata=none": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FamilyMemberReadDTO"
+                  }
+                }
+              },
+              "application/json;odata.streaming=true": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FamilyMemberReadDTO"
+                  }
+                }
+              },
+              "application/json;odata.streaming=false": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FamilyMemberReadDTO"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FamilyMemberReadDTO"
+                  }
+                }
+              },
+              "application/json;odata.metadata=minimal;odata.streaming=true;IEEE754Compatible=false": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FamilyMemberReadDTO"
+                  }
+                }
+              },
+              "application/json;odata.metadata=minimal;odata.streaming=true;IEEE754Compatible=true": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FamilyMemberReadDTO"
+                  }
+                }
+              },
+              "application/json;odata.metadata=minimal;odata.streaming=false;IEEE754Compatible=false": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FamilyMemberReadDTO"
+                  }
+                }
+              },
+              "application/json;odata.metadata=minimal;odata.streaming=false;IEEE754Compatible=true": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FamilyMemberReadDTO"
+                  }
+                }
+              },
+              "application/json;odata.metadata=minimal;IEEE754Compatible=false": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FamilyMemberReadDTO"
+                  }
+                }
+              },
+              "application/json;odata.metadata=minimal;IEEE754Compatible=true": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FamilyMemberReadDTO"
+                  }
+                }
+              },
+              "application/json;odata.metadata=full;odata.streaming=true;IEEE754Compatible=false": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FamilyMemberReadDTO"
+                  }
+                }
+              },
+              "application/json;odata.metadata=full;odata.streaming=true;IEEE754Compatible=true": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FamilyMemberReadDTO"
+                  }
+                }
+              },
+              "application/json;odata.metadata=full;odata.streaming=false;IEEE754Compatible=false": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FamilyMemberReadDTO"
+                  }
+                }
+              },
+              "application/json;odata.metadata=full;odata.streaming=false;IEEE754Compatible=true": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FamilyMemberReadDTO"
+                  }
+                }
+              },
+              "application/json;odata.metadata=full;IEEE754Compatible=false": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FamilyMemberReadDTO"
+                  }
+                }
+              },
+              "application/json;odata.metadata=full;IEEE754Compatible=true": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FamilyMemberReadDTO"
+                  }
+                }
+              },
+              "application/json;odata.metadata=none;odata.streaming=true;IEEE754Compatible=false": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FamilyMemberReadDTO"
+                  }
+                }
+              },
+              "application/json;odata.metadata=none;odata.streaming=true;IEEE754Compatible=true": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FamilyMemberReadDTO"
+                  }
+                }
+              },
+              "application/json;odata.metadata=none;odata.streaming=false;IEEE754Compatible=true": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FamilyMemberReadDTO"
+                  }
+                }
+              },
+              "application/json;odata.metadata=none;odata.streaming=false;IEEE754Compatible=false": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FamilyMemberReadDTO"
+                  }
+                }
+              },
+              "application/json;odata.metadata=none;IEEE754Compatible=false": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FamilyMemberReadDTO"
+                  }
+                }
+              },
+              "application/json;odata.metadata=none;IEEE754Compatible=true": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FamilyMemberReadDTO"
+                  }
+                }
+              },
+              "application/json;odata.streaming=true;IEEE754Compatible=false": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FamilyMemberReadDTO"
+                  }
+                }
+              },
+              "application/json;odata.streaming=true;IEEE754Compatible=true": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FamilyMemberReadDTO"
+                  }
+                }
+              },
+              "application/json;odata.streaming=false;IEEE754Compatible=false": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FamilyMemberReadDTO"
+                  }
+                }
+              },
+              "application/json;odata.streaming=false;IEEE754Compatible=true": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FamilyMemberReadDTO"
+                  }
+                }
+              },
+              "application/json;IEEE754Compatible=false": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FamilyMemberReadDTO"
+                  }
+                }
+              },
+              "application/json;IEEE754Compatible=true": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FamilyMemberReadDTO"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FamilyMemberReadDTO"
+                  }
+                }
+              },
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FamilyMemberReadDTO"
+                  }
+                }
+              },
+              "application/octet-stream": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FamilyMemberReadDTO"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FamilyMemberReadDTO"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/FamilyMembers/add": {
+      "post": {
+        "tags": [
+          "FamilyMembers"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json;odata.metadata=minimal;odata.streaming=true": {
+              "schema": {
+                "$ref": "#/components/schemas/FamilyMemberCreateDTO"
+              }
+            },
+            "application/json;odata.metadata=minimal;odata.streaming=false": {
+              "schema": {
+                "$ref": "#/components/schemas/FamilyMemberCreateDTO"
+              }
+            },
+            "application/json;odata.metadata=minimal": {
+              "schema": {
+                "$ref": "#/components/schemas/FamilyMemberCreateDTO"
+              }
+            },
+            "application/json;odata.metadata=full;odata.streaming=true": {
+              "schema": {
+                "$ref": "#/components/schemas/FamilyMemberCreateDTO"
+              }
+            },
+            "application/json;odata.metadata=full;odata.streaming=false": {
+              "schema": {
+                "$ref": "#/components/schemas/FamilyMemberCreateDTO"
+              }
+            },
+            "application/json;odata.metadata=full": {
+              "schema": {
+                "$ref": "#/components/schemas/FamilyMemberCreateDTO"
+              }
+            },
+            "application/json;odata.metadata=none;odata.streaming=true": {
+              "schema": {
+                "$ref": "#/components/schemas/FamilyMemberCreateDTO"
+              }
+            },
+            "application/json;odata.metadata=none;odata.streaming=false": {
+              "schema": {
+                "$ref": "#/components/schemas/FamilyMemberCreateDTO"
+              }
+            },
+            "application/json;odata.metadata=none": {
+              "schema": {
+                "$ref": "#/components/schemas/FamilyMemberCreateDTO"
+              }
+            },
+            "application/json;odata.streaming=true": {
+              "schema": {
+                "$ref": "#/components/schemas/FamilyMemberCreateDTO"
+              }
+            },
+            "application/json;odata.streaming=false": {
+              "schema": {
+                "$ref": "#/components/schemas/FamilyMemberCreateDTO"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FamilyMemberCreateDTO"
+              }
+            },
+            "application/json;odata.metadata=minimal;odata.streaming=true;IEEE754Compatible=false": {
+              "schema": {
+                "$ref": "#/components/schemas/FamilyMemberCreateDTO"
+              }
+            },
+            "application/json;odata.metadata=minimal;odata.streaming=true;IEEE754Compatible=true": {
+              "schema": {
+                "$ref": "#/components/schemas/FamilyMemberCreateDTO"
+              }
+            },
+            "application/json;odata.metadata=minimal;odata.streaming=false;IEEE754Compatible=false": {
+              "schema": {
+                "$ref": "#/components/schemas/FamilyMemberCreateDTO"
+              }
+            },
+            "application/json;odata.metadata=minimal;odata.streaming=false;IEEE754Compatible=true": {
+              "schema": {
+                "$ref": "#/components/schemas/FamilyMemberCreateDTO"
+              }
+            },
+            "application/json;odata.metadata=minimal;IEEE754Compatible=false": {
+              "schema": {
+                "$ref": "#/components/schemas/FamilyMemberCreateDTO"
+              }
+            },
+            "application/json;odata.metadata=minimal;IEEE754Compatible=true": {
+              "schema": {
+                "$ref": "#/components/schemas/FamilyMemberCreateDTO"
+              }
+            },
+            "application/json;odata.metadata=full;odata.streaming=true;IEEE754Compatible=false": {
+              "schema": {
+                "$ref": "#/components/schemas/FamilyMemberCreateDTO"
+              }
+            },
+            "application/json;odata.metadata=full;odata.streaming=true;IEEE754Compatible=true": {
+              "schema": {
+                "$ref": "#/components/schemas/FamilyMemberCreateDTO"
+              }
+            },
+            "application/json;odata.metadata=full;odata.streaming=false;IEEE754Compatible=false": {
+              "schema": {
+                "$ref": "#/components/schemas/FamilyMemberCreateDTO"
+              }
+            },
+            "application/json;odata.metadata=full;odata.streaming=false;IEEE754Compatible=true": {
+              "schema": {
+                "$ref": "#/components/schemas/FamilyMemberCreateDTO"
+              }
+            },
+            "application/json;odata.metadata=full;IEEE754Compatible=false": {
+              "schema": {
+                "$ref": "#/components/schemas/FamilyMemberCreateDTO"
+              }
+            },
+            "application/json;odata.metadata=full;IEEE754Compatible=true": {
+              "schema": {
+                "$ref": "#/components/schemas/FamilyMemberCreateDTO"
+              }
+            },
+            "application/json;odata.metadata=none;odata.streaming=true;IEEE754Compatible=false": {
+              "schema": {
+                "$ref": "#/components/schemas/FamilyMemberCreateDTO"
+              }
+            },
+            "application/json;odata.metadata=none;odata.streaming=true;IEEE754Compatible=true": {
+              "schema": {
+                "$ref": "#/components/schemas/FamilyMemberCreateDTO"
+              }
+            },
+            "application/json;odata.metadata=none;odata.streaming=false;IEEE754Compatible=true": {
+              "schema": {
+                "$ref": "#/components/schemas/FamilyMemberCreateDTO"
+              }
+            },
+            "application/json;odata.metadata=none;odata.streaming=false;IEEE754Compatible=false": {
+              "schema": {
+                "$ref": "#/components/schemas/FamilyMemberCreateDTO"
+              }
+            },
+            "application/json;odata.metadata=none;IEEE754Compatible=false": {
+              "schema": {
+                "$ref": "#/components/schemas/FamilyMemberCreateDTO"
+              }
+            },
+            "application/json;odata.metadata=none;IEEE754Compatible=true": {
+              "schema": {
+                "$ref": "#/components/schemas/FamilyMemberCreateDTO"
+              }
+            },
+            "application/json;odata.streaming=true;IEEE754Compatible=false": {
+              "schema": {
+                "$ref": "#/components/schemas/FamilyMemberCreateDTO"
+              }
+            },
+            "application/json;odata.streaming=true;IEEE754Compatible=true": {
+              "schema": {
+                "$ref": "#/components/schemas/FamilyMemberCreateDTO"
+              }
+            },
+            "application/json;odata.streaming=false;IEEE754Compatible=false": {
+              "schema": {
+                "$ref": "#/components/schemas/FamilyMemberCreateDTO"
+              }
+            },
+            "application/json;odata.streaming=false;IEEE754Compatible=true": {
+              "schema": {
+                "$ref": "#/components/schemas/FamilyMemberCreateDTO"
+              }
+            },
+            "application/json;IEEE754Compatible=false": {
+              "schema": {
+                "$ref": "#/components/schemas/FamilyMemberCreateDTO"
+              }
+            },
+            "application/json;IEEE754Compatible=true": {
+              "schema": {
+                "$ref": "#/components/schemas/FamilyMemberCreateDTO"
+              }
+            },
+            "application/xml": {
+              "schema": {
+                "$ref": "#/components/schemas/FamilyMemberCreateDTO"
+              }
+            },
+            "text/plain": {
+              "schema": {
+                "$ref": "#/components/schemas/FamilyMemberCreateDTO"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FamilyMemberCreateDTO"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/FamilyMemberCreateDTO"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/FamilyMembers/{memberId}": {
+      "put": {
+        "tags": [
+          "FamilyMembers"
+        ],
+        "parameters": [
+          {
+            "name": "memberId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json;odata.metadata=minimal;odata.streaming=true": {
+              "schema": {
+                "$ref": "#/components/schemas/FamilyMemberUpdateDTO"
+              }
+            },
+            "application/json;odata.metadata=minimal;odata.streaming=false": {
+              "schema": {
+                "$ref": "#/components/schemas/FamilyMemberUpdateDTO"
+              }
+            },
+            "application/json;odata.metadata=minimal": {
+              "schema": {
+                "$ref": "#/components/schemas/FamilyMemberUpdateDTO"
+              }
+            },
+            "application/json;odata.metadata=full;odata.streaming=true": {
+              "schema": {
+                "$ref": "#/components/schemas/FamilyMemberUpdateDTO"
+              }
+            },
+            "application/json;odata.metadata=full;odata.streaming=false": {
+              "schema": {
+                "$ref": "#/components/schemas/FamilyMemberUpdateDTO"
+              }
+            },
+            "application/json;odata.metadata=full": {
+              "schema": {
+                "$ref": "#/components/schemas/FamilyMemberUpdateDTO"
+              }
+            },
+            "application/json;odata.metadata=none;odata.streaming=true": {
+              "schema": {
+                "$ref": "#/components/schemas/FamilyMemberUpdateDTO"
+              }
+            },
+            "application/json;odata.metadata=none;odata.streaming=false": {
+              "schema": {
+                "$ref": "#/components/schemas/FamilyMemberUpdateDTO"
+              }
+            },
+            "application/json;odata.metadata=none": {
+              "schema": {
+                "$ref": "#/components/schemas/FamilyMemberUpdateDTO"
+              }
+            },
+            "application/json;odata.streaming=true": {
+              "schema": {
+                "$ref": "#/components/schemas/FamilyMemberUpdateDTO"
+              }
+            },
+            "application/json;odata.streaming=false": {
+              "schema": {
+                "$ref": "#/components/schemas/FamilyMemberUpdateDTO"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FamilyMemberUpdateDTO"
+              }
+            },
+            "application/json;odata.metadata=minimal;odata.streaming=true;IEEE754Compatible=false": {
+              "schema": {
+                "$ref": "#/components/schemas/FamilyMemberUpdateDTO"
+              }
+            },
+            "application/json;odata.metadata=minimal;odata.streaming=true;IEEE754Compatible=true": {
+              "schema": {
+                "$ref": "#/components/schemas/FamilyMemberUpdateDTO"
+              }
+            },
+            "application/json;odata.metadata=minimal;odata.streaming=false;IEEE754Compatible=false": {
+              "schema": {
+                "$ref": "#/components/schemas/FamilyMemberUpdateDTO"
+              }
+            },
+            "application/json;odata.metadata=minimal;odata.streaming=false;IEEE754Compatible=true": {
+              "schema": {
+                "$ref": "#/components/schemas/FamilyMemberUpdateDTO"
+              }
+            },
+            "application/json;odata.metadata=minimal;IEEE754Compatible=false": {
+              "schema": {
+                "$ref": "#/components/schemas/FamilyMemberUpdateDTO"
+              }
+            },
+            "application/json;odata.metadata=minimal;IEEE754Compatible=true": {
+              "schema": {
+                "$ref": "#/components/schemas/FamilyMemberUpdateDTO"
+              }
+            },
+            "application/json;odata.metadata=full;odata.streaming=true;IEEE754Compatible=false": {
+              "schema": {
+                "$ref": "#/components/schemas/FamilyMemberUpdateDTO"
+              }
+            },
+            "application/json;odata.metadata=full;odata.streaming=true;IEEE754Compatible=true": {
+              "schema": {
+                "$ref": "#/components/schemas/FamilyMemberUpdateDTO"
+              }
+            },
+            "application/json;odata.metadata=full;odata.streaming=false;IEEE754Compatible=false": {
+              "schema": {
+                "$ref": "#/components/schemas/FamilyMemberUpdateDTO"
+              }
+            },
+            "application/json;odata.metadata=full;odata.streaming=false;IEEE754Compatible=true": {
+              "schema": {
+                "$ref": "#/components/schemas/FamilyMemberUpdateDTO"
+              }
+            },
+            "application/json;odata.metadata=full;IEEE754Compatible=false": {
+              "schema": {
+                "$ref": "#/components/schemas/FamilyMemberUpdateDTO"
+              }
+            },
+            "application/json;odata.metadata=full;IEEE754Compatible=true": {
+              "schema": {
+                "$ref": "#/components/schemas/FamilyMemberUpdateDTO"
+              }
+            },
+            "application/json;odata.metadata=none;odata.streaming=true;IEEE754Compatible=false": {
+              "schema": {
+                "$ref": "#/components/schemas/FamilyMemberUpdateDTO"
+              }
+            },
+            "application/json;odata.metadata=none;odata.streaming=true;IEEE754Compatible=true": {
+              "schema": {
+                "$ref": "#/components/schemas/FamilyMemberUpdateDTO"
+              }
+            },
+            "application/json;odata.metadata=none;odata.streaming=false;IEEE754Compatible=true": {
+              "schema": {
+                "$ref": "#/components/schemas/FamilyMemberUpdateDTO"
+              }
+            },
+            "application/json;odata.metadata=none;odata.streaming=false;IEEE754Compatible=false": {
+              "schema": {
+                "$ref": "#/components/schemas/FamilyMemberUpdateDTO"
+              }
+            },
+            "application/json;odata.metadata=none;IEEE754Compatible=false": {
+              "schema": {
+                "$ref": "#/components/schemas/FamilyMemberUpdateDTO"
+              }
+            },
+            "application/json;odata.metadata=none;IEEE754Compatible=true": {
+              "schema": {
+                "$ref": "#/components/schemas/FamilyMemberUpdateDTO"
+              }
+            },
+            "application/json;odata.streaming=true;IEEE754Compatible=false": {
+              "schema": {
+                "$ref": "#/components/schemas/FamilyMemberUpdateDTO"
+              }
+            },
+            "application/json;odata.streaming=true;IEEE754Compatible=true": {
+              "schema": {
+                "$ref": "#/components/schemas/FamilyMemberUpdateDTO"
+              }
+            },
+            "application/json;odata.streaming=false;IEEE754Compatible=false": {
+              "schema": {
+                "$ref": "#/components/schemas/FamilyMemberUpdateDTO"
+              }
+            },
+            "application/json;odata.streaming=false;IEEE754Compatible=true": {
+              "schema": {
+                "$ref": "#/components/schemas/FamilyMemberUpdateDTO"
+              }
+            },
+            "application/json;IEEE754Compatible=false": {
+              "schema": {
+                "$ref": "#/components/schemas/FamilyMemberUpdateDTO"
+              }
+            },
+            "application/json;IEEE754Compatible=true": {
+              "schema": {
+                "$ref": "#/components/schemas/FamilyMemberUpdateDTO"
+              }
+            },
+            "application/xml": {
+              "schema": {
+                "$ref": "#/components/schemas/FamilyMemberUpdateDTO"
+              }
+            },
+            "text/plain": {
+              "schema": {
+                "$ref": "#/components/schemas/FamilyMemberUpdateDTO"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FamilyMemberUpdateDTO"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/FamilyMemberUpdateDTO"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "FamilyMembers"
+        ],
+        "parameters": [
+          {
+            "name": "memberId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/FamilyMembers/myfamilyinfo": {
+      "get": {
+        "tags": [
+          "FamilyMembers"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json;odata.metadata=minimal;odata.streaming=true": {
+                "schema": {
+                  "type": "array",
+                  "items": { }
+                }
+              },
+              "application/json;odata.metadata=minimal;odata.streaming=false": {
+                "schema": {
+                  "type": "array",
+                  "items": { }
+                }
+              },
+              "application/json;odata.metadata=minimal": {
+                "schema": {
+                  "type": "array",
+                  "items": { }
+                }
+              },
+              "application/json;odata.metadata=full;odata.streaming=true": {
+                "schema": {
+                  "type": "array",
+                  "items": { }
+                }
+              },
+              "application/json;odata.metadata=full;odata.streaming=false": {
+                "schema": {
+                  "type": "array",
+                  "items": { }
+                }
+              },
+              "application/json;odata.metadata=full": {
+                "schema": {
+                  "type": "array",
+                  "items": { }
+                }
+              },
+              "application/json;odata.metadata=none;odata.streaming=true": {
+                "schema": {
+                  "type": "array",
+                  "items": { }
+                }
+              },
+              "application/json;odata.metadata=none;odata.streaming=false": {
+                "schema": {
+                  "type": "array",
+                  "items": { }
+                }
+              },
+              "application/json;odata.metadata=none": {
+                "schema": {
+                  "type": "array",
+                  "items": { }
+                }
+              },
+              "application/json;odata.streaming=true": {
+                "schema": {
+                  "type": "array",
+                  "items": { }
+                }
+              },
+              "application/json;odata.streaming=false": {
+                "schema": {
+                  "type": "array",
+                  "items": { }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { }
+                }
+              },
+              "application/json;odata.metadata=minimal;odata.streaming=true;IEEE754Compatible=false": {
+                "schema": {
+                  "type": "array",
+                  "items": { }
+                }
+              },
+              "application/json;odata.metadata=minimal;odata.streaming=true;IEEE754Compatible=true": {
+                "schema": {
+                  "type": "array",
+                  "items": { }
+                }
+              },
+              "application/json;odata.metadata=minimal;odata.streaming=false;IEEE754Compatible=false": {
+                "schema": {
+                  "type": "array",
+                  "items": { }
+                }
+              },
+              "application/json;odata.metadata=minimal;odata.streaming=false;IEEE754Compatible=true": {
+                "schema": {
+                  "type": "array",
+                  "items": { }
+                }
+              },
+              "application/json;odata.metadata=minimal;IEEE754Compatible=false": {
+                "schema": {
+                  "type": "array",
+                  "items": { }
+                }
+              },
+              "application/json;odata.metadata=minimal;IEEE754Compatible=true": {
+                "schema": {
+                  "type": "array",
+                  "items": { }
+                }
+              },
+              "application/json;odata.metadata=full;odata.streaming=true;IEEE754Compatible=false": {
+                "schema": {
+                  "type": "array",
+                  "items": { }
+                }
+              },
+              "application/json;odata.metadata=full;odata.streaming=true;IEEE754Compatible=true": {
+                "schema": {
+                  "type": "array",
+                  "items": { }
+                }
+              },
+              "application/json;odata.metadata=full;odata.streaming=false;IEEE754Compatible=false": {
+                "schema": {
+                  "type": "array",
+                  "items": { }
+                }
+              },
+              "application/json;odata.metadata=full;odata.streaming=false;IEEE754Compatible=true": {
+                "schema": {
+                  "type": "array",
+                  "items": { }
+                }
+              },
+              "application/json;odata.metadata=full;IEEE754Compatible=false": {
+                "schema": {
+                  "type": "array",
+                  "items": { }
+                }
+              },
+              "application/json;odata.metadata=full;IEEE754Compatible=true": {
+                "schema": {
+                  "type": "array",
+                  "items": { }
+                }
+              },
+              "application/json;odata.metadata=none;odata.streaming=true;IEEE754Compatible=false": {
+                "schema": {
+                  "type": "array",
+                  "items": { }
+                }
+              },
+              "application/json;odata.metadata=none;odata.streaming=true;IEEE754Compatible=true": {
+                "schema": {
+                  "type": "array",
+                  "items": { }
+                }
+              },
+              "application/json;odata.metadata=none;odata.streaming=false;IEEE754Compatible=true": {
+                "schema": {
+                  "type": "array",
+                  "items": { }
+                }
+              },
+              "application/json;odata.metadata=none;odata.streaming=false;IEEE754Compatible=false": {
+                "schema": {
+                  "type": "array",
+                  "items": { }
+                }
+              },
+              "application/json;odata.metadata=none;IEEE754Compatible=false": {
+                "schema": {
+                  "type": "array",
+                  "items": { }
+                }
+              },
+              "application/json;odata.metadata=none;IEEE754Compatible=true": {
+                "schema": {
+                  "type": "array",
+                  "items": { }
+                }
+              },
+              "application/json;odata.streaming=true;IEEE754Compatible=false": {
+                "schema": {
+                  "type": "array",
+                  "items": { }
+                }
+              },
+              "application/json;odata.streaming=true;IEEE754Compatible=true": {
+                "schema": {
+                  "type": "array",
+                  "items": { }
+                }
+              },
+              "application/json;odata.streaming=false;IEEE754Compatible=false": {
+                "schema": {
+                  "type": "array",
+                  "items": { }
+                }
+              },
+              "application/json;odata.streaming=false;IEEE754Compatible=true": {
+                "schema": {
+                  "type": "array",
+                  "items": { }
+                }
+              },
+              "application/json;IEEE754Compatible=false": {
+                "schema": {
+                  "type": "array",
+                  "items": { }
+                }
+              },
+              "application/json;IEEE754Compatible=true": {
+                "schema": {
+                  "type": "array",
+                  "items": { }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "array",
+                  "items": { }
+                }
+              },
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": { }
+                }
+              },
+              "application/octet-stream": {
+                "schema": {
+                  "type": "array",
+                  "items": { }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/WeatherForecast": {
       "get": {
         "tags": [
@@ -15,7 +2642,87 @@
           "200": {
             "description": "OK",
             "content": {
-              "text/plain": {
+              "application/json;odata.metadata=minimal;odata.streaming=true": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/WeatherForecast"
+                  }
+                }
+              },
+              "application/json;odata.metadata=minimal;odata.streaming=false": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/WeatherForecast"
+                  }
+                }
+              },
+              "application/json;odata.metadata=minimal": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/WeatherForecast"
+                  }
+                }
+              },
+              "application/json;odata.metadata=full;odata.streaming=true": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/WeatherForecast"
+                  }
+                }
+              },
+              "application/json;odata.metadata=full;odata.streaming=false": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/WeatherForecast"
+                  }
+                }
+              },
+              "application/json;odata.metadata=full": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/WeatherForecast"
+                  }
+                }
+              },
+              "application/json;odata.metadata=none;odata.streaming=true": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/WeatherForecast"
+                  }
+                }
+              },
+              "application/json;odata.metadata=none;odata.streaming=false": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/WeatherForecast"
+                  }
+                }
+              },
+              "application/json;odata.metadata=none": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/WeatherForecast"
+                  }
+                }
+              },
+              "application/json;odata.streaming=true": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/WeatherForecast"
+                  }
+                }
+              },
+              "application/json;odata.streaming=false": {
                 "schema": {
                   "type": "array",
                   "items": {
@@ -24,6 +2731,222 @@
                 }
               },
               "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/WeatherForecast"
+                  }
+                }
+              },
+              "application/json;odata.metadata=minimal;odata.streaming=true;IEEE754Compatible=false": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/WeatherForecast"
+                  }
+                }
+              },
+              "application/json;odata.metadata=minimal;odata.streaming=true;IEEE754Compatible=true": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/WeatherForecast"
+                  }
+                }
+              },
+              "application/json;odata.metadata=minimal;odata.streaming=false;IEEE754Compatible=false": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/WeatherForecast"
+                  }
+                }
+              },
+              "application/json;odata.metadata=minimal;odata.streaming=false;IEEE754Compatible=true": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/WeatherForecast"
+                  }
+                }
+              },
+              "application/json;odata.metadata=minimal;IEEE754Compatible=false": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/WeatherForecast"
+                  }
+                }
+              },
+              "application/json;odata.metadata=minimal;IEEE754Compatible=true": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/WeatherForecast"
+                  }
+                }
+              },
+              "application/json;odata.metadata=full;odata.streaming=true;IEEE754Compatible=false": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/WeatherForecast"
+                  }
+                }
+              },
+              "application/json;odata.metadata=full;odata.streaming=true;IEEE754Compatible=true": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/WeatherForecast"
+                  }
+                }
+              },
+              "application/json;odata.metadata=full;odata.streaming=false;IEEE754Compatible=false": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/WeatherForecast"
+                  }
+                }
+              },
+              "application/json;odata.metadata=full;odata.streaming=false;IEEE754Compatible=true": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/WeatherForecast"
+                  }
+                }
+              },
+              "application/json;odata.metadata=full;IEEE754Compatible=false": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/WeatherForecast"
+                  }
+                }
+              },
+              "application/json;odata.metadata=full;IEEE754Compatible=true": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/WeatherForecast"
+                  }
+                }
+              },
+              "application/json;odata.metadata=none;odata.streaming=true;IEEE754Compatible=false": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/WeatherForecast"
+                  }
+                }
+              },
+              "application/json;odata.metadata=none;odata.streaming=true;IEEE754Compatible=true": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/WeatherForecast"
+                  }
+                }
+              },
+              "application/json;odata.metadata=none;odata.streaming=false;IEEE754Compatible=true": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/WeatherForecast"
+                  }
+                }
+              },
+              "application/json;odata.metadata=none;odata.streaming=false;IEEE754Compatible=false": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/WeatherForecast"
+                  }
+                }
+              },
+              "application/json;odata.metadata=none;IEEE754Compatible=false": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/WeatherForecast"
+                  }
+                }
+              },
+              "application/json;odata.metadata=none;IEEE754Compatible=true": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/WeatherForecast"
+                  }
+                }
+              },
+              "application/json;odata.streaming=true;IEEE754Compatible=false": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/WeatherForecast"
+                  }
+                }
+              },
+              "application/json;odata.streaming=true;IEEE754Compatible=true": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/WeatherForecast"
+                  }
+                }
+              },
+              "application/json;odata.streaming=false;IEEE754Compatible=false": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/WeatherForecast"
+                  }
+                }
+              },
+              "application/json;odata.streaming=false;IEEE754Compatible=true": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/WeatherForecast"
+                  }
+                }
+              },
+              "application/json;IEEE754Compatible=false": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/WeatherForecast"
+                  }
+                }
+              },
+              "application/json;IEEE754Compatible=true": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/WeatherForecast"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/WeatherForecast"
+                  }
+                }
+              },
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/WeatherForecast"
+                  }
+                }
+              },
+              "application/octet-stream": {
                 "schema": {
                   "type": "array",
                   "items": {
@@ -47,6 +2970,164 @@
   },
   "components": {
     "schemas": {
+      "FamilyCreateDTO": {
+        "type": "object",
+        "properties": {
+          "familyName": {
+            "type": "string",
+            "nullable": true
+          },
+          "address": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "FamilyMemberCreateDTO": {
+        "required": [
+          "userId"
+        ],
+        "type": "object",
+        "properties": {
+          "userId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "relationship": {
+            "maxLength": 50,
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "FamilyMemberReadDTO": {
+        "type": "object",
+        "properties": {
+          "memberId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "userId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "fullName": {
+            "maxLength": 100,
+            "type": "string",
+            "nullable": true
+          },
+          "email": {
+            "type": "string",
+            "format": "email",
+            "nullable": true
+          },
+          "relationship": {
+            "maxLength": 50,
+            "type": "string",
+            "nullable": true
+          },
+          "joinDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "FamilyMemberUpdateDTO": {
+        "type": "object",
+        "properties": {
+          "relationship": {
+            "maxLength": 50,
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "FamilyReadDTO": {
+        "type": "object",
+        "properties": {
+          "familyId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "familyName": {
+            "type": "string",
+            "nullable": true
+          },
+          "address": {
+            "type": "string",
+            "nullable": true
+          },
+          "createdByName": {
+            "type": "string",
+            "nullable": true
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "relationship": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "FamilyUpdateDTO": {
+        "type": "object",
+        "properties": {
+          "familyName": {
+            "type": "string",
+            "nullable": true
+          },
+          "address": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "LoginRequest": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "nullable": true
+          },
+          "password": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "RegisterRequest": {
+        "type": "object",
+        "properties": {
+          "fullName": {
+            "type": "string",
+            "nullable": true
+          },
+          "email": {
+            "type": "string",
+            "nullable": true
+          },
+          "password": {
+            "type": "string",
+            "nullable": true
+          },
+          "phoneNumber": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
       "WeatherForecast": {
         "type": "object",
         "properties": {
@@ -70,6 +3151,19 @@
         },
         "additionalProperties": false
       }
+    },
+    "securitySchemes": {
+      "Bearer": {
+        "type": "http",
+        "description": "Enter 'Bearer {token}'",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
     }
-  }
+  },
+  "security": [
+    {
+      "Bearer": [ ]
+    }
+  ]
 }

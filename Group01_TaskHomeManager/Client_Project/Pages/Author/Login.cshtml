@@ -1,0 +1,46 @@
+﻿@page
+@model dynamic
+@{
+    ViewData["Title"] = "Đăng nhập";
+}
+
+<h2>Đăng nhập</h2>
+
+<form id="loginForm">
+    <input type="email" id="email" placeholder="Email" required /><br>
+    <input type="password" id="password" placeholder="Mật khẩu" required /><br>
+    <button type="submit">Đăng nhập</button>
+</form>
+
+<p id="message"></p>
+
+<script>
+    document.getElementById("loginForm").addEventListener("submit", async e => {
+        e.preventDefault();
+
+        const email = document.getElementById("email").value;
+        const password = document.getElementById("password").value;
+        const msg = document.getElementById("message");
+
+        const res = await fetch("https://localhost:7145/api/Auth/login", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email, password })
+        });
+
+        if (res.ok) {
+            const data = await res.json();
+            msg.style.color = "green";
+            msg.innerText = "Đăng nhập thành công!";
+
+            localStorage.setItem("token", data.token);
+            localStorage.setItem("user", JSON.stringify(data.user));
+
+            setTimeout(() => window.location.href = "/Home", 1000);
+        } else {
+            const err = await res.json().catch(() => ({}));
+            msg.style.color = "red";
+            msg.innerText = err.message || "Sai thông tin đăng nhập!";
+        }
+    });
+</script>

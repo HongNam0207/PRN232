@@ -3,12 +3,16 @@
   "WorkspaceRootPath": "D:\\FPT_8\\PRN232\\Project\\PRN232\\Group01_TaskHomeManager\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{C4EA6F56-88C7-405D-A6F8-72AB436FCA81}|Server\\Server.csproj|d:\\fpt_8\\prn232\\project\\prn232\\group01_taskhomemanager\\server\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
-      "RelativeMoniker": "D:0:0:{C4EA6F56-88C7-405D-A6F8-72AB436FCA81}|Server\\Server.csproj|solutionrelative:server\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+      "AbsoluteMoniker": "D:0:0:{C4EA6F56-88C7-405D-A6F8-72AB436FCA81}|Server\\Server.csproj|d:\\fpt_8\\prn232\\project\\prn232\\group01_taskhomemanager\\server\\controllers\\user\\familiescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C4EA6F56-88C7-405D-A6F8-72AB436FCA81}|Server\\Server.csproj|solutionrelative:server\\controllers\\user\\familiescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{C4EA6F56-88C7-405D-A6F8-72AB436FCA81}|Server\\Server.csproj|d:\\fpt_8\\prn232\\project\\prn232\\group01_taskhomemanager\\server\\server.http||{5703B403-55E7-4C63-8C88-A8F52C7A45C5}",
-      "RelativeMoniker": "D:0:0:{C4EA6F56-88C7-405D-A6F8-72AB436FCA81}|Server\\Server.csproj|solutionrelative:server\\server.http||{5703B403-55E7-4C63-8C88-A8F52C7A45C5}"
+      "AbsoluteMoniker": "D:0:0:{C4EA6F56-88C7-405D-A6F8-72AB436FCA81}|Server\\Server.csproj|d:\\fpt_8\\prn232\\project\\prn232\\group01_taskhomemanager\\server\\controllers\\user\\familymemberscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C4EA6F56-88C7-405D-A6F8-72AB436FCA81}|Server\\Server.csproj|solutionrelative:server\\controllers\\user\\familymemberscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C4EA6F56-88C7-405D-A6F8-72AB436FCA81}|Server\\Server.csproj|d:\\fpt_8\\prn232\\project\\prn232\\group01_taskhomemanager\\server\\dtos\\familymemberdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C4EA6F56-88C7-405D-A6F8-72AB436FCA81}|Server\\Server.csproj|solutionrelative:server\\dtos\\familymemberdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -18,32 +22,45 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 1,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "appsettings.json",
-              "DocumentMoniker": "D:\\FPT_8\\PRN232\\Project\\PRN232\\Group01_TaskHomeManager\\Server\\appsettings.json",
-              "RelativeDocumentMoniker": "Server\\appsettings.json",
-              "ToolTip": "D:\\FPT_8\\PRN232\\Project\\PRN232\\Group01_TaskHomeManager\\Server\\appsettings.json",
-              "RelativeToolTip": "Server\\appsettings.json",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2025-10-27T00:30:46.004Z",
+              "DocumentIndex": 1,
+              "Title": "FamilyMembersController.cs",
+              "DocumentMoniker": "D:\\FPT_8\\PRN232\\Project\\PRN232\\Group01_TaskHomeManager\\Server\\Controllers\\User\\FamilyMembersController.cs",
+              "RelativeDocumentMoniker": "Server\\Controllers\\User\\FamilyMembersController.cs",
+              "ToolTip": "D:\\FPT_8\\PRN232\\Project\\PRN232\\Group01_TaskHomeManager\\Server\\Controllers\\User\\FamilyMembersController.cs",
+              "RelativeToolTip": "Server\\Controllers\\User\\FamilyMembersController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-07T07:44:50.495Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "Server.http",
-              "DocumentMoniker": "D:\\FPT_8\\PRN232\\Project\\PRN232\\Group01_TaskHomeManager\\Server\\Server.http",
-              "RelativeDocumentMoniker": "Server\\Server.http",
-              "ToolTip": "D:\\FPT_8\\PRN232\\Project\\PRN232\\Group01_TaskHomeManager\\Server\\Server.http",
-              "RelativeToolTip": "Server\\Server.http",
+              "DocumentIndex": 0,
+              "Title": "FamiliesController.cs",
+              "DocumentMoniker": "D:\\FPT_8\\PRN232\\Project\\PRN232\\Group01_TaskHomeManager\\Server\\Controllers\\User\\FamiliesController.cs",
+              "RelativeDocumentMoniker": "Server\\Controllers\\User\\FamiliesController.cs",
+              "ToolTip": "D:\\FPT_8\\PRN232\\Project\\PRN232\\Group01_TaskHomeManager\\Server\\Controllers\\User\\FamiliesController.cs",
+              "RelativeToolTip": "Server\\Controllers\\User\\FamiliesController.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003502|",
-              "WhenOpened": "2025-10-27T00:30:43.4Z",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-07T07:44:49.824Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "FamilyMemberDTO.cs",
+              "DocumentMoniker": "D:\\FPT_8\\PRN232\\Project\\PRN232\\Group01_TaskHomeManager\\Server\\DTOs\\FamilyMemberDTO.cs",
+              "RelativeDocumentMoniker": "Server\\DTOs\\FamilyMemberDTO.cs",
+              "ToolTip": "D:\\FPT_8\\PRN232\\Project\\PRN232\\Group01_TaskHomeManager\\Server\\DTOs\\FamilyMemberDTO.cs",
+              "RelativeToolTip": "Server\\DTOs\\FamilyMemberDTO.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-07T07:44:48.761Z",
               "EditorCaption": ""
             }
           ]

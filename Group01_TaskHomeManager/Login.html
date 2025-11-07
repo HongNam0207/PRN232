@@ -1,0 +1,45 @@
+﻿<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8" />
+    <title>Đăng nhập</title>
+</head>
+<body>
+    <h2>Đăng nhập</h2>
+    <form id="loginForm">
+        <input type="email" id="email" placeholder="Email" required /><br />
+        <input type="password" id="password" placeholder="Mật khẩu" required /><br />
+        <button type="submit">Đăng nhập</button>
+    </form>
+
+    <p id="result"></p>
+
+    <script>
+    document.getElementById("loginForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const data = {
+        email: document.getElementById("email").value,
+        password: document.getElementById("password").value,
+      };
+
+      const res = await fetch("https://localhost:7145/api/Auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
+
+      const result = await res.json();
+
+      if (res.ok) {
+        localStorage.setItem("token", result.token);
+        localStorage.setItem("user", JSON.stringify(result.user));
+        alert("Đăng nhập thành công!");
+        window.location.href = "Home.html";
+      } else {
+        document.getElementById("result").innerText = result.message || "Sai thông tin đăng nhập!";
+      }
+    });
+    </script>
+</body>
+</html>

@@ -1,111 +1,127 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.OData;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Swashbuckle.AspNetCore.SwaggerGen;
 using System.Text;
-using Microsoft.OData.ModelBuilder;
-using Microsoft.AspNetCore.OData;
-using AutoMapper;
-using Server.Models; // Chứa các entity được scaffold
+using Server.Models;
 
-var builder = WebApplication.CreateBuilder(args);
-
-// ==============================
-// 1️⃣ Add services to container
-// ==============================
-
-// Add Controllers + OData support
-builder.Services.AddControllers()
-    .AddOData(options =>
-    {
-        options.Select().Filter().OrderBy().Expand().Count().SetMaxTop(100);
-    });
-
-// Add EF Core (SQL Server)
-builder.Services.AddDbContext<HomeTaskManagementDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("MyCnn")));
-
-// Add AutoMapper (map DTO ↔ Entity)
-builder.Services.AddAutoMapper(typeof(Program));
-
-// Add Swagger (with JWT Authorization)
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(options =>
+namespace Server // ✅ Thêm namespace bọc toàn bộ
 {
-    options.SwaggerDoc("v1", new OpenApiInfo
+    // ============================================================
+    // 🔹 1️⃣ Class filter
+    // ============================================================
+    public class ODataQuerySwaggerFilter : IDocumentFilter
     {
-        Title = "Home Task Management API",
-        Version = "v1",
-        Description = "API for managing users, families, and tasks."
-    });
-
-    // Add JWT to Swagger
-    options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
-    {
-        Name = "Authorization",
-        Type = SecuritySchemeType.Http,
-        Scheme = "Bearer",
-        BearerFormat = "JWT",
-        In = ParameterLocation.Header,
-        Description = "Enter 'Bearer {token}'"
-    });
-
-    options.AddSecurityRequirement(new OpenApiSecurityRequirement
-    {
+        public void Apply(OpenApiDocument swaggerDoc, DocumentFilterContext context)
         {
-            new OpenApiSecurityScheme
-            {
-                Reference = new OpenApiReference
-                {
-                    Type = ReferenceType.SecurityScheme,
-                    Id = "Bearer"
-                }
-            },
-            Array.Empty<string>()
+            swaggerDoc.Info.Description +=
+                "\n\n📘 **OData supported:** `$filter`, `$orderby`, `$select`, `$top`, `$skip`, `$count`" +
+                "\n\n🧩 Examples:" +
+                "\n- `/api/Families?$orderby=CreatedAt desc`" +
+                "\n- `/api/Families?$filter=Address eq 'Hanoi'`" +
+                "\n- `/api/Tasks?$filter=Status eq 'Pending'`";
         }
-    });
-});
+    }
 
-// ==============================
-// 2️⃣ Configure Authentication & Authorization (JWT)
-// ==============================
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddJwtBearer(options =>
+    // ============================================================
+    // 🔹 2️⃣ Bắt đầu cấu hình app
+    // ============================================================
+    public class Program
     {
-        // 🔹 Tạo cấu hình JWT cơ bản
-        options.TokenValidationParameters = new TokenValidationParameters
+        public static void Main(string[] args)
         {
-            ValidateIssuer = false,   // có thể bật true khi có Issuer
-            ValidateAudience = false, // có thể bật true khi có Audience
-            ValidateLifetime = true,
-            ValidateIssuerSigningKey = true,
-            IssuerSigningKey = new SymmetricSecurityKey(
-                Encoding.UTF8.GetBytes("ThisIsASecretKeyForJwtAuthentication123!")) // khóa bí mật
-        };
-    });
+            var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddAuthorization();
+            // Controllers + OData
+            builder.Services.AddControllers()
+                .AddOData(opt => opt.Select().Filter().OrderBy().Expand().Count().SetMaxTop(100));
 
-// ==============================
-// 3️⃣ Build app
-// ==============================
-var app = builder.Build();
+            // Database
+            builder.Services.AddDbContext<HomeTaskManagementDbContext>(options =>
+                options.UseSqlServer(builder.Configuration.GetConnectionString("MyCnn")));
 
-// ==============================
-// 4️⃣ Middleware pipeline
-// ==============================
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
+            // CORS
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("AllowAll", policy =>
+                    policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
+            });
+
+            // JWT
+            builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>
+                {
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuer = false,
+                        ValidateAudience = false,
+                        ValidateLifetime = true,
+                        ValidateIssuerSigningKey = true,
+                        IssuerSigningKey = new SymmetricSecurityKey(
+                            Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"] ?? "DefaultSecretKey"))
+                    };
+                });
+
+            builder.Services.AddAuthorization();
+
+            // Swagger + OData info
+            builder.Services.AddEndpointsApiExplorer();
+            builder.Services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo
+                {
+                    Title = "🏠 HomeTaskManagement API",
+                    Version = "v1",
+                    Description = "API for family task management (OData + JWT + DTO)"
+                });
+
+                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                {
+                    In = ParameterLocation.Header,
+                    Description = "Enter 'Bearer {token}'",
+                    Name = "Authorization",
+                    Type = SecuritySchemeType.Http,
+                    Scheme = "bearer",
+                    BearerFormat = "JWT"
+                });
+
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement
+                {
+                    {
+                        new OpenApiSecurityScheme
+                        {
+                            Reference = new OpenApiReference
+                            {
+                                Type = ReferenceType.SecurityScheme,
+                                Id = "Bearer"
+                            }
+                        },
+                        Array.Empty<string>()
+                    }
+                });
+
+                c.DocumentFilter<ODataQuerySwaggerFilter>();
+            });
+
+            // ============================================================
+            // 🔹 Build App
+            // ============================================================
+            var app = builder.Build();
+
+            if (app.Environment.IsDevelopment())
+            {
+                app.UseSwagger();
+                app.UseSwaggerUI();
+            }
+
+            app.UseHttpsRedirection();
+            app.UseCors("AllowAll");
+            app.UseAuthentication();
+            app.UseAuthorization();
+            app.MapControllers();
+            app.Run();
+        }
+    }
 }
-
-app.UseHttpsRedirection();
-
-// Authentication & Authorization middlewares
-app.UseAuthentication();
-app.UseAuthorization();
-
-app.MapControllers();
-
-app.Run();

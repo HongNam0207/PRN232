@@ -1,0 +1,173 @@
+-- ===========================
+-- DATABASE: HomeTaskManagementDB
+-- ===========================
+CREATE DATABASE HomeTaskManagementDB;
+GO
+USE HomeTaskManagementDB;
+GO
+
+-- ===========================
+-- 1. Roles
+-- ===========================
+CREATE TABLE Roles (
+    RoleId INT IDENTITY(1,1) PRIMARY KEY,
+    RoleName NVARCHAR(50) NOT NULL
+);
+
+-- ===========================
+-- 2. Users
+-- ===========================
+CREATE TABLE Users (
+    UserId INT IDENTITY(1,1) PRIMARY KEY,
+    FullName NVARCHAR(100),
+    Email NVARCHAR(100) UNIQUE NOT NULL,
+    PasswordHash NVARCHAR(255) NOT NULL,
+    RoleId INT FOREIGN KEY REFERENCES Roles(RoleId),
+    PhoneNumber NVARCHAR(20),
+    CreatedAt DATETIME DEFAULT GETDATE(),
+    IsActive BIT DEFAULT 1
+);
+
+-- ===========================
+-- 3. Families
+-- ===========================
+CREATE TABLE Families (
+    FamilyId INT IDENTITY(1,1) PRIMARY KEY,
+    FamilyName NVARCHAR(100),
+    Address NVARCHAR(200),
+    CreatedBy INT FOREIGN KEY REFERENCES Users(UserId),
+    CreatedAt DATETIME DEFAULT GETDATE()
+);
+
+-- ===========================
+-- 4. Family Members
+-- ===========================
+CREATE TABLE FamilyMembers (
+    MemberId INT IDENTITY(1,1) PRIMARY KEY,
+    FamilyId INT FOREIGN KEY REFERENCES Families(FamilyId),
+    UserId INT FOREIGN KEY REFERENCES Users(UserId),
+    Relationship NVARCHAR(50),
+    JoinDate DATETIME DEFAULT GETDATE()
+);
+
+-- ===========================
+-- 5. Projects (Mở rộng 1.2)
+-- ===========================
+CREATE TABLE Projects (
+    ProjectId INT IDENTITY(1,1) PRIMARY KEY,
+    FamilyId INT FOREIGN KEY REFERENCES Families(FamilyId),
+    ProjectName NVARCHAR(200) NOT NULL,
+    Description NVARCHAR(MAX),
+    StartDate DATETIME DEFAULT GETDATE(),
+    EndDate DATETIME NULL,
+    CreatedBy INT FOREIGN KEY REFERENCES Users(UserId),
+    CreatedAt DATETIME DEFAULT GETDATE()
+);
+
+-- ===========================
+-- 6. Tasks
+-- ===========================
+CREATE TABLE Tasks (
+    TaskId INT IDENTITY(1,1) PRIMARY KEY,
+    FamilyId INT FOREIGN KEY REFERENCES Families(FamilyId),
+    ProjectId INT NULL FOREIGN KEY REFERENCES Projects(ProjectId),
+    Title NVARCHAR(200),
+    Description NVARCHAR(MAX),
+    Priority NVARCHAR(20),
+    Status NVARCHAR(20) DEFAULT 'Pending',
+    CreatedBy INT FOREIGN KEY REFERENCES Users(UserId),
+    CreatedAt DATETIME DEFAULT GETDATE(),
+    DueDate DATETIME,
+    UpdatedAt DATETIME NULL
+);
+
+-- ===========================
+-- 7. Task Assignments
+-- ===========================
+CREATE TABLE TaskAssignments (
+    AssignmentId INT IDENTITY(1,1) PRIMARY KEY,
+    TaskId INT FOREIGN KEY REFERENCES Tasks(TaskId),
+    UserId INT FOREIGN KEY REFERENCES Users(UserId),
+    AssignedAt DATETIME DEFAULT GETDATE(),
+    CompletedAt DATETIME NULL,
+    ProgressNote NVARCHAR(MAX),
+    ProgressPercent INT DEFAULT 0
+);
+
+-- ===========================
+-- 8. Comments
+-- ===========================
+CREATE TABLE Comments (
+    CommentId INT IDENTITY(1,1) PRIMARY KEY,
+    TaskId INT FOREIGN KEY REFERENCES Tasks(TaskId),
+    UserId INT FOREIGN KEY REFERENCES Users(UserId),
+    Content NVARCHAR(MAX),
+    CreatedAt DATETIME DEFAULT GETDATE(),
+    ParentCommentId INT NULL
+);
+
+-- ===========================
+-- 9. Notifications
+-- ===========================
+CREATE TABLE Notifications (
+    NotificationId INT IDENTITY(1,1) PRIMARY KEY,
+    UserId INT FOREIGN KEY REFERENCES Users(UserId),
+    Message NVARCHAR(255),
+    Type NVARCHAR(50) NULL,
+    RelatedId INT NULL,
+    IsRead BIT DEFAULT 0,
+    CreatedAt DATETIME DEFAULT GETDATE()
+);
+
+-- ===========================
+-- 10. Rewards (Mở rộng 1.3)
+-- ===========================
+CREATE TABLE Rewards (
+    RewardId INT IDENTITY(1,1) PRIMARY KEY,
+    UserId INT FOREIGN KEY REFERENCES Users(UserId),
+    Points INT DEFAULT 0,
+    Badge NVARCHAR(100) NULL,
+    EarnedAt DATETIME DEFAULT GETDATE(),
+    Description NVARCHAR(255) NULL
+);
+
+-- ===========================
+-- 11. Activity Logs (Mở rộng 1.4)
+-- ===========================
+CREATE TABLE ActivityLogs (
+    LogId INT IDENTITY(1,1) PRIMARY KEY,
+    UserId INT FOREIGN KEY REFERENCES Users(UserId),
+    Action NVARCHAR(100) NOT NULL,      -- ví dụ: "Create Task", "Complete Task"
+    Entity NVARCHAR(50) NOT NULL,       -- ví dụ: "Task", "Comment"
+    EntityId INT NULL,
+    Description NVARCHAR(255) NULL,
+    CreatedAt DATETIME DEFAULT GETDATE()
+);
+
+-- ===========================
+-- 12. Attachments (Mở rộng 1.5)
+-- ===========================
+CREATE TABLE Attachments (
+    AttachmentId INT IDENTITY(1,1) PRIMARY KEY,
+    TaskId INT FOREIGN KEY REFERENCES Tasks(TaskId),
+    FileUrl NVARCHAR(255) NOT NULL,
+    UploadedBy INT FOREIGN KEY REFERENCES Users(UserId),
+    UploadedAt DATETIME DEFAULT GETDATE(),
+    FileType NVARCHAR(50) NULL
+);
+
+-- ===========================
+-- 13. User Performance (Mở rộng 3.1)
+-- ===========================
+CREATE TABLE UserPerformance (
+    PerformanceId INT IDENTITY(1,1) PRIMARY KEY,
+    UserId INT FOREIGN KEY REFERENCES Users(UserId),
+    TotalTasks INT DEFAULT 0,
+    CompletedTasks INT DEFAULT 0,
+    OverdueTasks INT DEFAULT 0,
+    AvgCompletionTime_Hours FLOAT DEFAULT 0,
+    CalculatedAt DATETIME DEFAULT GETDATE()
+);
+GO
+
+INSERT INTO Roles (RoleName) VALUES (N'Admin'), (N'Member');

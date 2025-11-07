@@ -1,0 +1,45 @@
+﻿@page
+@model dynamic
+@{
+    ViewData["Title"] = "Đăng ký";
+}
+
+<h2>Đăng ký tài khoản</h2>
+
+<form id="registerForm">
+    <input id="fullName" placeholder="Họ tên" required /><br>
+    <input id="email" type="email" placeholder="Email" required /><br>
+    <input id="password" type="password" placeholder="Mật khẩu" required /><br>
+    <input id="phoneNumber" placeholder="Số điện thoại" /><br>
+    <button type="submit">Đăng ký</button>
+</form>
+
+<p id="message"></p>
+
+<script>
+    document.getElementById("registerForm").addEventListener("submit", async e => {
+        e.preventDefault();
+
+        const fullName = document.getElementById("fullName").value;
+        const email = document.getElementById("email").value;
+        const password = document.getElementById("password").value;
+        const phoneNumber = document.getElementById("phoneNumber").value;
+        const msg = document.getElementById("message");
+
+        const res = await fetch("https://localhost:7145/api/Auth/register", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ fullName, email, password, phoneNumber })
+        });
+
+        if (res.ok) {
+            msg.style.color = "green";
+            msg.innerText = "Đăng ký thành công!";
+            setTimeout(() => window.location.href = "/Login", 1000);
+        } else {
+            const err = await res.json().catch(() => ({}));
+            msg.style.color = "red";
+            msg.innerText = err.message || "Đăng ký thất bại!";
+        }
+    });
+</script>
