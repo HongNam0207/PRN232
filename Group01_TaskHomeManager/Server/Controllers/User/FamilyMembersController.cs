@@ -181,5 +181,28 @@ namespace Server.Controllers
                 })
                 .AsQueryable();
         }
+        // ============================================================
+        // 🔹 6. GET: api/FamilyMembers?familyId=1
+        // ============================================================
+        [HttpGet]
+        [Authorize(Roles = "Admin,Member")]
+        public async Task<IActionResult> GetByFamilyId([FromQuery] int familyId)
+        {
+            if (familyId <= 0)
+                return BadRequest(new { message = "Thiếu hoặc sai FamilyId." });
+
+            var members = await _context.FamilyMembers
+                .Include(fm => fm.User)
+                .Where(fm => fm.FamilyId == familyId)
+                .Select(fm => new
+                {
+                    userId = fm.UserId,
+                    fullName = fm.User.FullName
+                })
+                .ToListAsync();
+
+            return Ok(members);
+        }
+
     }
 }

@@ -10,7 +10,7 @@ namespace Server.Controllers.User
 {
     [ApiController]
     [Route("api/[controller]")]
-    [Authorize(Roles = "Member")]
+    [Authorize(Roles = "Member")] // ✅ Cho phép cả Member và Admin
     public class TasksController : ControllerBase
     {
         private readonly HomeTaskManagementDbContext _context;
@@ -82,9 +82,10 @@ namespace Server.Controllers.User
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            // ✅ Đọc claim theo key "UserId" đúng với token bạn tạo
+            var userIdClaim = User.FindFirst("UserId")?.Value;
             if (userIdClaim == null)
-                return Unauthorized();
+                return Unauthorized(new { message = "Token không hợp lệ hoặc thiếu UserId." });
 
             int userId = int.Parse(userIdClaim);
 
@@ -108,11 +109,14 @@ namespace Server.Controllers.User
             _context.Tasks.Add(newTask);
             await _context.SaveChangesAsync();
 
-            // 🔹 Tạo các bản ghi giao việc trong TaskAssignments
+            // Giao việc nếu có người nhận
             if (req.AssignedUserIds != null && req.AssignedUserIds.Count > 0)
             {
                 foreach (var uid in req.AssignedUserIds)
                 {
+                    bool inFamily = await _context.FamilyMembers.AnyAsync(f => f.FamilyId == familyId && f.UserId == uid);
+                    if (!inFamily) continue;
+
                     _context.TaskAssignments.Add(new TaskAssignment
                     {
                         TaskId = newTask.TaskId,
@@ -121,10 +125,11 @@ namespace Server.Controllers.User
                         ProgressPercent = 0
                     });
                 }
+
                 await _context.SaveChangesAsync();
             }
 
-            return Ok(new { message = "Tạo công việc mới thành công.", data = newTask });
+            return Ok(new { message = "✅ Tạo công việc mới thành công.", data = newTask });
         }
 
         // ============================================================
@@ -133,14 +138,11 @@ namespace Server.Controllers.User
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateTask(int id, [FromBody] TaskUpdateDTO req)
         {
-            var task = await _context.Tasks
-                .Include(t => t.TaskAssignments)
-                .FirstOrDefaultAsync(t => t.TaskId == id);
-
+            var task = await _context.Tasks.Include(t => t.TaskAssignments).FirstOrDefaultAsync(t => t.TaskId == id);
             if (task == null)
                 return NotFound(new { message = "Không tìm thấy công việc." });
 
-            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var userIdClaim = User.FindFirst("UserId")?.Value;
             if (userIdClaim == null)
                 return Unauthorized();
 
@@ -152,14 +154,13 @@ namespace Server.Controllers.User
             if ((task.FamilyId ?? 0) != (member.FamilyId ?? 0))
                 return Forbid();
 
-            // 🔹 Cập nhật thông tin công việc
+            // Cập nhật thông tin
             task.Title = req.Title ?? task.Title;
             task.Description = req.Description ?? task.Description;
             task.Status = req.Status ?? task.Status;
             task.DueDate = req.DueDate ?? task.DueDate;
             task.UpdatedAt = DateTime.Now;
 
-            // 🔹 Cập nhật danh sách người được giao (nếu có)
             if (req.AssignedUserIds != null)
             {
                 _context.TaskAssignments.RemoveRange(task.TaskAssignments);
@@ -176,7 +177,7 @@ namespace Server.Controllers.User
             }
 
             await _context.SaveChangesAsync();
-            return Ok(new { message = "Cập nhật công việc thành công." });
+            return Ok(new { message = "✅ Cập nhật công việc thành công." });
         }
 
         // ============================================================
@@ -185,10 +186,7 @@ namespace Server.Controllers.User
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteTask(int id)
         {
-            var task = await _context.Tasks
-                .Include(t => t.TaskAssignments)
-                .FirstOrDefaultAsync(t => t.TaskId == id);
-
+            var task = await _context.Tasks.Include(t => t.TaskAssignments).FirstOrDefaultAsync(t => t.TaskId == id);
             if (task == null)
                 return NotFound(new { message = "Không tìm thấy công việc." });
 
@@ -196,26 +194,22 @@ namespace Server.Controllers.User
             _context.Tasks.Remove(task);
             await _context.SaveChangesAsync();
 
-            return Ok(new { message = "Đã xóa công việc." });
+            return Ok(new { message = "🗑️ Đã xóa công việc." });
         }
 
         // ============================================================
-        // 🔹 6. GET (OData): api/Tasks/family
+        // 🔹 6. GET: api/Tasks/family
         // ============================================================
         [HttpGet("family")]
         [EnableQuery]
         public IQueryable<TaskReadDTO> GetTasksInMyFamily()
         {
-            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var userIdClaim = User.FindFirst("UserId")?.Value;
             if (userIdClaim == null)
                 return Enumerable.Empty<TaskReadDTO>().AsQueryable();
 
             int userId = int.Parse(userIdClaim);
-
-            var familyId = _context.FamilyMembers
-                .Where(m => m.UserId == userId)
-                .Select(m => m.FamilyId)
-                .FirstOrDefault();
+            var familyId = _context.FamilyMembers.Where(m => m.UserId == userId).Select(m => m.FamilyId).FirstOrDefault();
 
             return _context.Tasks
                 .Include(t => t.TaskAssignments)

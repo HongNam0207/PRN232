@@ -10,7 +10,7 @@ namespace Server.Controllers.User
 {
     [ApiController]
     [Route("api/[controller]")]
-    [Authorize(Roles = "Member")]
+    [Authorize(Roles = "Member,Admin")] // ✅ Cho phép cả Member và Admin
     public class ProjectsController : ControllerBase
     {
         private readonly HomeTaskManagementDbContext _context;
@@ -45,11 +45,16 @@ namespace Server.Controllers.User
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] ProjectCreateDTO req)
         {
-            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            // ✅ Đọc đúng claim "UserId"
+            var userIdClaim = User.FindFirst("UserId")?.Value;
             if (userIdClaim == null)
-                return Unauthorized();
+                return Unauthorized(new { message = "Token không hợp lệ hoặc thiếu UserId." });
 
             int userId = int.Parse(userIdClaim);
+
             var member = await _context.FamilyMembers.FirstOrDefaultAsync(m => m.UserId == userId);
             if (member == null)
                 return BadRequest(new { message = "Bạn chưa thuộc về gia đình nào." });
@@ -65,7 +70,7 @@ namespace Server.Controllers.User
             _context.Projects.Add(project);
             await _context.SaveChangesAsync();
 
-            return Ok(new { message = "Tạo dự án mới thành công.", data = project });
+            return Ok(new { message = "✅ Tạo dự án mới thành công.", data = project });
         }
 
         // ============================================================
@@ -84,7 +89,7 @@ namespace Server.Controllers.User
             _context.Projects.Update(project);
             await _context.SaveChangesAsync();
 
-            return Ok(new { message = "Cập nhật dự án thành công." });
+            return Ok(new { message = "✅ Cập nhật dự án thành công." });
         }
 
         // ============================================================
@@ -100,7 +105,7 @@ namespace Server.Controllers.User
             _context.Projects.Remove(project);
             await _context.SaveChangesAsync();
 
-            return Ok(new { message = "Đã xóa dự án." });
+            return Ok(new { message = "🗑️ Đã xóa dự án thành công." });
         }
     }
 }

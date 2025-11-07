@@ -3441,6 +3441,28 @@
         }
       }
     },
+    "/api/FamilyMembers": {
+      "get": {
+        "tags": [
+          "FamilyMembers"
+        ],
+        "parameters": [
+          {
+            "name": "familyId",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/api/Projects": {
       "get": {
         "tags": [
@@ -7032,10 +7054,10 @@
     },
     "securitySchemes": {
       "Bearer": {
-        "type": "http",
-        "description": "Enter 'Bearer {token}'",
-        "scheme": "bearer",
-        "bearerFormat": "JWT"
+        "type": "apiKey",
+        "description": "Nhập đầy đủ 'Bearer {token}' vào đây (VD: Bearer eyJhbGciOi...)",
+        "name": "Authorization",
+        "in": "header"
       }
     }
   },

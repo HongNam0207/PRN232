@@ -10,7 +10,7 @@ namespace Server.Controllers.User
 {
     [ApiController]
     [Route("api/[controller]")]
-    [Authorize(Roles = "Member")] // 🔒 Chỉ cho phép thành viên đăng nhập
+    [Authorize(Roles = "Member,Admin")] // ✅ Cho phép cả hai vai trò
     public class CommentsController : ControllerBase
     {
         private readonly HomeTaskManagementDbContext _context;
@@ -22,7 +22,6 @@ namespace Server.Controllers.User
 
         // ============================================================
         // 🔹 1. GET (OData): api/Comments/task/{taskId}
-        //     => Lấy danh sách bình luận của một công việc
         // ============================================================
         [HttpGet("task/{taskId}")]
         [EnableQuery]
@@ -47,7 +46,6 @@ namespace Server.Controllers.User
 
         // ============================================================
         // 🔹 2. POST: api/Comments
-        //     => Thêm mới bình luận
         // ============================================================
         [HttpPost]
         public async Task<IActionResult> CreateComment([FromBody] CommentCreateDTO req)
@@ -55,13 +53,13 @@ namespace Server.Controllers.User
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            // ✅ Đọc đúng claim "UserId"
+            var userIdClaim = User.FindFirst("UserId")?.Value;
             if (userIdClaim == null)
-                return Unauthorized();
+                return Unauthorized(new { message = "Token không hợp lệ hoặc thiếu UserId." });
 
             int userId = int.Parse(userIdClaim);
 
-            // Kiểm tra task tồn tại
             var task = await _context.Tasks.FindAsync(req.TaskId);
             if (task == null)
                 return NotFound(new { message = "Không tìm thấy công việc để bình luận." });
@@ -78,17 +76,16 @@ namespace Server.Controllers.User
             _context.Comments.Add(newComment);
             await _context.SaveChangesAsync();
 
-            return Ok(new { message = "Đã thêm bình luận thành công.", data = newComment });
+            return Ok(new { message = "✅ Đã thêm bình luận thành công.", data = newComment });
         }
 
         // ============================================================
         // 🔹 3. PUT: api/Comments/{id}
-        //     => Chỉnh sửa nội dung bình luận của chính mình
         // ============================================================
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateComment(int id, [FromBody] CommentCreateDTO req)
         {
-            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var userIdClaim = User.FindFirst("UserId")?.Value;
             if (userIdClaim == null)
                 return Unauthorized();
 
@@ -98,21 +95,16 @@ namespace Server.Controllers.User
             if (comment == null)
                 return NotFound(new { message = "Không tìm thấy bình luận." });
 
-            // 🔒 Chỉ cho phép sửa bình luận của chính mình
             if (comment.UserId != userId)
                 return Forbid();
 
             comment.Content = req.Content ?? comment.Content;
-
-            // ❌ Không có UpdatedAt — nên không cần dòng này
-            // comment.UpdatedAt = DateTime.Now;
-
             _context.Comments.Update(comment);
             await _context.SaveChangesAsync();
 
             return Ok(new
             {
-                message = "Cập nhật bình luận thành công.",
+                message = "✅ Cập nhật bình luận thành công.",
                 data = new
                 {
                     comment.CommentId,
@@ -124,12 +116,11 @@ namespace Server.Controllers.User
 
         // ============================================================
         // 🔹 4. DELETE: api/Comments/{id}
-        //     => Xóa bình luận của chính mình
         // ============================================================
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteComment(int id)
         {
-            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var userIdClaim = User.FindFirst("UserId")?.Value;
             if (userIdClaim == null)
                 return Unauthorized();
 
@@ -145,7 +136,7 @@ namespace Server.Controllers.User
             _context.Comments.Remove(comment);
             await _context.SaveChangesAsync();
 
-            return Ok(new { message = "Đã xóa bình luận thành công." });
+            return Ok(new { message = "🗑️ Đã xóa bình luận thành công." });
         }
     }
 }

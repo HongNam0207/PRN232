@@ -171,3 +171,90 @@ CREATE TABLE UserPerformance (
 GO
 
 INSERT INTO Roles (RoleName) VALUES (N'Admin'), (N'Member');
+
+-- Users
+INSERT INTO Users (FullName, Email, PasswordHash, RoleId, PhoneNumber)
+VALUES
+(N'Nguyễn Quản Trị', 'admin@gmail.com', '123456', 1, '0911111111'),
+(N'Nguyễn Hồng Nam', 'nam@gmail.com', '123456', 2, '0988888888'),
+(N'Lê Thùy Dung', 'dung@gmail.com', '123456', 2, '0977777777'),
+(N'Phạm Quốc Huy', 'huy@gmail.com', '123456', 2, '0966666666');
+
+-- Families
+INSERT INTO Families (FamilyName, Address, CreatedBy)
+VALUES
+(N'Gia đình Nguyễn', N'Hà Nội', 2),
+(N'Gia đình Lê', N'Hồ Chí Minh', 3);
+
+-- Family Members
+INSERT INTO FamilyMembers (FamilyId, UserId, Relationship)
+VALUES
+(1, 2, N'Chủ gia đình'),
+(1, 3, N'Vợ'),
+(1, 4, N'Con trai'),
+(2, 3, N'Chủ gia đình');
+
+-- Projects
+INSERT INTO Projects (FamilyId, ProjectName, Description, CreatedBy)
+VALUES
+(1, N'Dọn dẹp nhà cửa Tết', N'Tổng vệ sinh toàn bộ nhà trước Tết', 2),
+(1, N'Trồng cây sân vườn', N'Cải tạo khu vườn sau nhà', 3);
+
+-- Tasks
+INSERT INTO Tasks (FamilyId, ProjectId, Title, Description, Priority, Status, CreatedBy, DueDate)
+VALUES
+(1, 1, N'Dọn phòng khách', N'Lau chùi, hút bụi, sắp xếp bàn ghế', 'High', 'Pending', 2, '2025-11-10'),
+(1, 1, N'Rửa xe máy', N'Rửa xe của bố và mẹ', 'Medium', 'Doing', 3, '2025-11-09'),
+(1, 2, N'Trồng cây mới', N'Mua cây hoa giấy và trồng ở sân', 'Low', 'Pending', 4, '2025-11-15');
+
+-- Task Assignments
+INSERT INTO TaskAssignments (TaskId, UserId, ProgressPercent)
+VALUES
+(1, 2, 30),
+(1, 3, 50),
+(2, 4, 80),
+(3, 2, 10);
+
+-- Comments
+INSERT INTO Comments (TaskId, UserId, Content)
+VALUES
+(1, 2, N'Anh sẽ làm phần sắp xếp tủ trước.'),
+(1, 3, N'Em sẽ lau kính và bàn.'),
+(2, 4, N'Xe mẹ hơi bẩn, con sẽ rửa trước.'),
+(3, 2, N'Đã mua cây về, chuẩn bị trồng.');
+
+-- Notifications
+INSERT INTO Notifications (UserId, Message, Type)
+VALUES
+(2, N'Bạn có công việc mới được giao.', N'Task'),
+(3, N'Bạn có bình luận mới trong công việc.', N'Comment'),
+(4, N'Bạn nhận được lời khen từ trưởng nhóm.', N'Reward');
+
+-- Rewards
+INSERT INTO Rewards (UserId, Points, Badge, Description)
+VALUES
+(2, 50, N'Hăng hái', N'Hoàn thành công việc đầu tiên.'),
+(3, 100, N'Người chăm chỉ', N'Thực hiện nhiều công việc trong tháng.'),
+(4, 20, N'Tân binh', N'Tham gia dự án đầu tiên.');
+
+-- Activity Logs
+INSERT INTO ActivityLogs (UserId, Action, Entity, EntityId, Description)
+VALUES
+(2, 'Create Task', 'Task', 1, N'Tạo công việc dọn phòng khách'),
+(3, 'Comment', 'Comment', 1, N'Thêm bình luận mới'),
+(4, 'Update Progress', 'TaskAssignment', 3, N'Cập nhật tiến độ công việc');
+
+-- Attachments
+INSERT INTO Attachments (TaskId, FileUrl, UploadedBy, FileType)
+VALUES
+(1, N'https://example.com/image1.jpg', 2, N'Image'),
+(3, N'https://example.com/garden-plan.pdf', 3, N'PDF');
+
+-- User Performance
+INSERT INTO UserPerformance (UserId, TotalTasks, CompletedTasks, OverdueTasks, AvgCompletionTime_Hours)
+VALUES
+(2, 10, 7, 1, 12.5),
+(3, 8, 8, 0, 10.3),
+(4, 5, 2, 1, 24.0);
+
+

@@ -22,38 +22,38 @@ namespace Server.Controllers
 
         // ============================================================
         // 🔹 1. GET (OData): api/Families
-        //    => Lấy danh sách tất cả các gia đình, có hỗ trợ filter/sort
+        //    => Lấy danh sách tất cả các gia đình (có hỗ trợ filter/sort)
         // ============================================================
         [HttpGet]
         [EnableQuery]
         public IQueryable<FamilyReadDTO> GetFamilies()
         {
             return _context.Families
-                .Include(f => f.CreatedBy)
+                .Include(f => f.CreatedByNavigation)
                 .Select(f => new FamilyReadDTO
                 {
                     FamilyId = f.FamilyId,
                     FamilyName = f.FamilyName,
                     Address = f.Address,
-                    // ✅ Sửa ở đây:
                     CreatedAt = f.CreatedAt ?? DateTime.MinValue,
                     CreatedByName = f.CreatedByNavigation != null
-        ? f.CreatedByNavigation.FullName
-        : "Unknown"
-                });
-
+                        ? f.CreatedByNavigation.FullName
+                        : "Unknown"
+                })
+                .AsQueryable();
         }
 
         // ============================================================
-        // 🔹 2. GET (OData): api/Families/myfamilies
+        // 🔹 2. GET: api/Families/myfamilies
         //    => Lấy danh sách gia đình mà user hiện tại đang tham gia
         // ============================================================
         [HttpGet("myfamilies")]
         [EnableQuery]
         public IQueryable<FamilyReadDTO> GetMyFamilies()
         {
-            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            if (userIdClaim == null) return Enumerable.Empty<FamilyReadDTO>().AsQueryable();
+            var userIdClaim = User.FindFirst("UserId")?.Value; // ✅ đổi đúng claim
+            if (userIdClaim == null)
+                return Enumerable.Empty<FamilyReadDTO>().AsQueryable();
 
             int userId = int.Parse(userIdClaim);
 
@@ -66,11 +66,10 @@ namespace Server.Controllers
                     FamilyId = fm.Family.FamilyId,
                     FamilyName = fm.Family.FamilyName,
                     Address = fm.Family.Address,
-                    // ✅ Sửa lỗi kiểu DateTime?
                     CreatedAt = fm.Family.CreatedAt ?? DateTime.Now,
                     Relationship = fm.Relationship
-                });
-
+                })
+                .AsQueryable();
         }
 
         // ============================================================
@@ -80,7 +79,7 @@ namespace Server.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateFamily([FromBody] FamilyCreateDTO dto)
         {
-            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var userIdClaim = User.FindFirst("UserId")?.Value; // ✅ sửa đúng claim
             if (userIdClaim == null) return Unauthorized();
 
             int userId = int.Parse(userIdClaim);
@@ -88,6 +87,7 @@ namespace Server.Controllers
             if (string.IsNullOrWhiteSpace(dto.FamilyName))
                 return BadRequest(new { message = "Tên gia đình không được để trống." });
 
+            // 🔹 Tạo mới gia đình
             var family = new Family
             {
                 FamilyName = dto.FamilyName,
@@ -99,7 +99,7 @@ namespace Server.Controllers
             _context.Families.Add(family);
             await _context.SaveChangesAsync();
 
-            // Người tạo tự động trở thành thành viên
+            // 🔹 Người tạo tự động trở thành thành viên
             var member = new FamilyMember
             {
                 FamilyId = family.FamilyId,
@@ -107,6 +107,7 @@ namespace Server.Controllers
                 Relationship = "Chủ gia đình",
                 JoinDate = DateTime.Now
             };
+
             _context.FamilyMembers.Add(member);
             await _context.SaveChangesAsync();
 
@@ -118,21 +119,21 @@ namespace Server.Controllers
                     FamilyId = family.FamilyId,
                     FamilyName = family.FamilyName,
                     Address = family.Address,
-                    CreatedAt = family.CreatedAt ?? DateTime.Now, // ✅ Sửa ở đây
+                    CreatedAt = family.CreatedAt ?? DateTime.Now,
                     CreatedByName = "Bạn",
                     Relationship = "Chủ gia đình"
                 }
             });
-
         }
 
         // ============================================================
         // 🔹 4. PUT: api/Families/{id}
+        //    => Cập nhật thông tin gia đình (chỉ người tạo được sửa)
         // ============================================================
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateFamily(int id, [FromBody] FamilyUpdateDTO dto)
         {
-            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var userIdClaim = User.FindFirst("UserId")?.Value; // ✅ sửa đúng claim
             if (userIdClaim == null) return Unauthorized();
 
             int userId = int.Parse(userIdClaim);
@@ -156,11 +157,12 @@ namespace Server.Controllers
 
         // ============================================================
         // 🔹 5. DELETE: api/Families/{id}
+        //    => Xóa gia đình (chỉ người tạo được xóa)
         // ============================================================
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteFamily(int id)
         {
-            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var userIdClaim = User.FindFirst("UserId")?.Value; // ✅ sửa đúng claim
             if (userIdClaim == null) return Unauthorized();
 
             int userId = int.Parse(userIdClaim);

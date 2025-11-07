@@ -22,7 +22,7 @@ app.UseAuthorization();
 // ✅ Khi chạy, tự động redirect về trang /Author/Login
 app.MapGet("/", context =>
 {
-    context.Response.Redirect("/Author/Login");
+    context.Response.Redirect("/Auth/Login");
     return Task.CompletedTask;
 });
 

@@ -79,13 +79,13 @@ namespace Server // ✅ Thêm namespace bọc toàn bộ
 
                 c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                 {
-                    In = ParameterLocation.Header,
-                    Description = "Enter 'Bearer {token}'",
+                    Description = "Nhập đầy đủ 'Bearer {token}' vào đây (VD: Bearer eyJhbGciOi...)",
                     Name = "Authorization",
-                    Type = SecuritySchemeType.Http,
-                    Scheme = "bearer",
-                    BearerFormat = "JWT"
+                    In = ParameterLocation.Header,
+                    Type = SecuritySchemeType.ApiKey, // ✅ đổi từ Http → ApiKey
+                    Scheme = "Bearer"
                 });
+
 
                 c.AddSecurityRequirement(new OpenApiSecurityRequirement
                 {

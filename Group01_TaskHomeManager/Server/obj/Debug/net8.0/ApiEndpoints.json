@@ -335,6 +335,22 @@
   },
   {
     "ContainingType": "Server.Controllers.FamilyMembersController",
+    "Method": "GetByFamilyId",
+    "RelativePath": "api/FamilyMembers",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "familyId",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Server.Controllers.FamilyMembersController",
     "Method": "UpdateRelationship",
     "RelativePath": "api/FamilyMembers/{memberId}",
     "HttpMethod": "PUT",
