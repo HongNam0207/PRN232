@@ -1,0 +1,231 @@
+﻿@page
+@model dynamic
+@{
+    ViewData["Title"] = "Chỉnh sửa công việc";
+}
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<style>
+    body {
+        font-family: 'Inter', sans-serif;
+        background: linear-gradient(180deg, #f8faff 0%, #eef2fb 100%);
+        min-height: 100vh;
+    }
+
+    .header-bar {
+        background: linear-gradient(90deg, #4c6ef5, #5f8efb);
+        border-radius: 12px;
+        color: white;
+        padding: 1.2rem 1.6rem;
+        margin-top: 2rem;
+        margin-bottom: 1.5rem;
+        box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+    }
+
+        .header-bar h3 {
+            margin: 0;
+            font-weight: 600;
+        }
+
+    .form-card {
+        background: #fff;
+        border-radius: 16px;
+        padding: 2rem;
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+        max-width: 650px;
+        margin: auto;
+    }
+
+    .form-control, .form-select {
+        border-radius: 10px;
+        padding: 0.75rem;
+        border: 1px solid #ced4da;
+        transition: 0.2s ease;
+    }
+
+        .form-control:focus, .form-select:focus {
+            border-color: #4c6ef5;
+            box-shadow: 0 0 0 0.25rem rgba(76, 110, 245, 0.15);
+        }
+
+    .btn-primary {
+        background: linear-gradient(90deg, #4c6ef5, #5f8efb);
+        border: none;
+        font-weight: 600;
+    }
+
+        .btn-primary:hover {
+            background: linear-gradient(90deg, #3b5bdb, #4263eb);
+        }
+
+    .loading-text {
+        color: #6c757d;
+        text-align: center;
+        font-style: italic;
+    }
+</style>
+
+<div class="container">
+    <div class="header-bar d-flex justify-content-between align-items-center">
+        <h3>✏️ Chỉnh sửa công việc</h3>
+        <a href="javascript:history.back()" class="btn btn-light btn-sm shadow-sm">⬅ Quay lại</a>
+    </div>
+
+    <form id="editForm" class="form-card">
+        <input type="hidden" id="taskId" />
+        <div class="mb-3">
+            <label class="form-label">Tiêu đề <span class="text-danger">*</span></label>
+            <input id="title" class="form-control" required placeholder="Nhập tiêu đề công việc" />
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Mô tả</label>
+            <textarea id="description" class="form-control" placeholder="Thêm mô tả chi tiết (không bắt buộc)"></textarea>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Ngày hết hạn</label>
+            <input type="date" id="dueDate" class="form-control" />
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Giao cho</label>
+            <select id="assignedUser" class="form-select">
+                <option value="">⏳ Đang tải thành viên...</option>
+            </select>
+        </div>
+
+        <button type="submit" class="btn btn-primary w-100 mt-2">💾 Lưu thay đổi</button>
+    </form>
+</div>
+
+<script>
+    const token = localStorage.getItem("token");
+    const id = new URLSearchParams(window.location.search).get("id");
+    const familyId = new URLSearchParams(window.location.search).get("familyId");
+
+    const apiTasks = "https://localhost:7145/api/Tasks";
+    const apiMembers = "https://localhost:7145/api/FamilyMembers";
+    const apiAssign = "https://localhost:7145/api/TaskAssignments";
+
+    const userSelect = document.getElementById("assignedUser");
+
+    // =================== 1️⃣ Load danh sách thành viên ===================
+    async function loadMembers() {
+        try {
+            const res = await fetch(`${apiMembers}?familyId=${familyId}`, {
+                headers: { "Authorization": `Bearer ${token}` }
+            });
+            if (!res.ok) throw new Error("Không thể tải danh sách thành viên");
+            const members = await res.json();
+
+            if (members.length === 0) {
+                userSelect.innerHTML = `<option value="">⚠️ Gia đình chưa có thành viên nào</option>`;
+                return;
+            }
+
+            userSelect.innerHTML = `<option value="">-- Chọn thành viên --</option>` +
+                members.map(m => `<option value="${m.userId}">${m.fullName}</option>`).join("");
+        } catch (err) {
+            userSelect.innerHTML = `<option value="">❌ Lỗi khi tải thành viên</option>`;
+            console.error(err);
+        }
+    }
+
+    // =================== 2️⃣ Load thông tin công việc ===================
+    async function loadTask() {
+        try {
+            const res = await fetch(`${apiTasks}/${id}`, { headers: { "Authorization": `Bearer ${token}` } });
+            if (!res.ok) throw new Error("Không thể tải dữ liệu công việc.");
+
+            const t = await res.json();
+            document.getElementById("taskId").value = t.taskId;
+            document.getElementById("title").value = t.title;
+            document.getElementById("description").value = t.description || "";
+            document.getElementById("dueDate").value = t.dueDate?.split('T')[0] || "";
+
+            // Gắn sẵn người nhận nếu có
+            if (t.assignedUserIds && t.assignedUserIds.length > 0) {
+                userSelect.value = t.assignedUserIds[0];
+            }
+        } catch (err) {
+            Swal.fire({ icon: "error", title: "❌ Lỗi tải công việc!", text: err.message });
+        }
+    }
+
+    // =================== 3️⃣ Cập nhật công việc ===================
+    document.getElementById("editForm").addEventListener("submit", async e => {
+        e.preventDefault();
+        const payload = {
+            title: document.getElementById("title").value.trim(),
+            description: document.getElementById("description").value.trim(),
+            dueDate: document.getElementById("dueDate").value || null
+        };
+
+        if (!payload.title) {
+            Swal.fire({ icon: "warning", title: "Thiếu tiêu đề!", text: "Vui lòng nhập tiêu đề công việc." });
+            return;
+        }
+
+        Swal.fire({
+            title: "Xác nhận lưu thay đổi?",
+            text: "Bạn có chắc muốn cập nhật công việc này?",
+            icon: "question",
+            showCancelButton: true,
+            confirmButtonText: "💾 Lưu",
+            cancelButtonText: "Hủy",
+            confirmButtonColor: "#4c6ef5"
+        }).then(async (result) => {
+            if (!result.isConfirmed) return;
+
+            try {
+                // 1️⃣ Cập nhật công việc
+                const res = await fetch(`${apiTasks}/${id}`, {
+                    method: "PUT",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${token}`
+                    },
+                    body: JSON.stringify(payload)
+                });
+
+                if (!res.ok) throw new Error("Không thể cập nhật công việc");
+
+                // 2️⃣ Cập nhật người được giao (nếu có chọn)
+                const selectedUser = userSelect.value;
+                if (selectedUser) {
+                    await fetch(apiAssign, {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                            "Authorization": `Bearer ${token}`
+                        },
+                        body: JSON.stringify({
+                            taskId: id,
+                            userId: parseInt(selectedUser),
+                            progressPercent: 0
+                        })
+                    });
+                }
+
+                Swal.fire({
+                    icon: "success",
+                    title: "🎉 Cập nhật thành công!",
+                    timer: 1500,
+                    showConfirmButton: false
+                }).then(() => {
+                    window.location.href = `/Families/Index?familyId=${familyId}`;
+                });
+
+            } catch (err) {
+                Swal.fire({ icon: "error", title: "❌ Lỗi khi lưu!", text: err.message });
+            }
+        });
+    });
+
+    // =================== 4️⃣ Khởi chạy ===================
+    loadMembers().then(loadTask);
+</script>

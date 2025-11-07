@@ -1,0 +1,237 @@
+﻿@page
+@model dynamic
+@{
+    ViewData["Title"] = "Hồ sơ cá nhân";
+}
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+    body {
+        font-family: 'Inter', sans-serif;
+        background: linear-gradient(180deg, #f8faff 0%, #eef2fb 100%);
+        min-height: 100vh;
+    }
+
+    .header-bar {
+        background: linear-gradient(90deg, #4c6ef5, #5f8efb);
+        border-radius: 12px;
+        color: white;
+        padding: 1.2rem 1.6rem;
+        margin-top: 2rem;
+        margin-bottom: 1.5rem;
+        box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+    }
+
+        .header-bar h3 {
+            margin: 0;
+            font-weight: 600;
+        }
+
+    .card {
+        border: none;
+        border-radius: 16px;
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+    }
+
+    #avatar {
+        border: 4px solid #dee2e6;
+        transition: transform 0.2s ease;
+    }
+
+        #avatar:hover {
+            transform: scale(1.05);
+        }
+
+    .btn-success {
+        background: linear-gradient(90deg, #4c6ef5, #5f8efb);
+        border: none;
+        font-weight: 600;
+    }
+
+        .btn-success:hover {
+            background: linear-gradient(90deg, #3b5bdb, #4263eb);
+        }
+
+    .chart-container {
+        position: relative;
+        width: 100%;
+        height: 240px;
+    }
+
+    .stats-box {
+        background-color: #f8f9fa;
+        border-radius: 10px;
+        padding: 1rem;
+        margin-bottom: 1rem;
+    }
+
+        .stats-box h6 {
+            color: #4c6ef5;
+            font-weight: 600;
+        }
+</style>
+
+<div class="container">
+    <div class="header-bar d-flex justify-content-between align-items-center">
+        <h3>👤 Hồ sơ cá nhân</h3>
+        <button class="btn btn-light btn-sm shadow-sm" onclick="window.history.back()">⬅ Quay lại</button>
+    </div>
+
+    <div id="profileContainer" class="row g-4">
+        <!-- Cột trái: Thông tin cá nhân -->
+        <div class="col-md-5">
+            <div class="card p-4">
+                <div class="text-center mb-3">
+                    <img id="avatar" src="/images/default-avatar.png" alt="Avatar"
+                         class="rounded-circle mb-3" width="120" height="120">
+                    <h5 id="fullName">Đang tải...</h5>
+                    <p class="text-muted mb-1" id="email"></p>
+                    <p><span class="badge bg-primary" id="role">Member</span></p>
+                </div>
+                <hr>
+                <form id="updateForm">
+                    <div class="mb-3">
+                        <label class="form-label">Họ và tên</label>
+                        <input type="text" class="form-control" id="inputFullName" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Số điện thoại</label>
+                        <input type="text" class="form-control" id="inputPhone">
+                    </div>
+                    <button type="submit" class="btn btn-success w-100">💾 Cập nhật thông tin</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Cột phải: Thống kê cá nhân -->
+        <div class="col-md-7">
+            <div class="card p-4">
+                <h5 class="mb-3">📊 Hiệu suất cá nhân</h5>
+                <div id="stats" class="text-center mb-3">
+                    <p>⏳ Đang tải dữ liệu...</p>
+                </div>
+                <div class="chart-container">
+                    <canvas id="chartTasks"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const token = localStorage.getItem("token");
+    if (!token) window.location.href = "/Auth/Login";
+
+    const apiUser = "https://localhost:7145/api/Users/me";
+    const apiStats = "https://localhost:7145/api/Tasks/mytasks";
+
+    // 🔹 Tải thông tin người dùng
+    async function loadProfile() {
+        try {
+            const res = await fetch(apiUser, { headers: { "Authorization": `Bearer ${token}` } });
+            if (!res.ok) throw new Error("Không thể tải hồ sơ.");
+            const data = await res.json();
+
+            document.getElementById("fullName").innerText = data.fullName;
+            document.getElementById("email").innerText = data.email;
+            document.getElementById("role").innerText = data.role;
+            document.getElementById("inputFullName").value = data.fullName;
+            document.getElementById("inputPhone").value = data.phoneNumber || "";
+        } catch (err) {
+            Swal.fire({ icon: "error", title: "Lỗi!", text: err.message });
+        }
+    }
+
+    // 🔹 Tải thống kê cá nhân
+    async function loadStats() {
+        try {
+            const res = await fetch(apiStats, { headers: { "Authorization": `Bearer ${token}` } });
+            if (!res.ok) throw new Error("Không thể tải dữ liệu công việc.");
+
+            const tasks = await res.json();
+            const total = tasks.length;
+            const completed = tasks.filter(t => t.status === "Completed").length;
+            const pending = total - completed;
+
+            document.getElementById("stats").innerHTML = `
+                <div class="stats-box">
+                    <h6>Tổng công việc: ${total}</h6>
+                    <p>✅ Hoàn thành: <strong>${completed}</strong> | ⏳ Chưa xong: <strong>${pending}</strong></p>
+                </div>
+            `;
+
+            new Chart(document.getElementById("chartTasks"), {
+                type: "doughnut",
+                data: {
+                    labels: ["Hoàn thành", "Chưa hoàn thành"],
+                    datasets: [{
+                        data: [completed, pending],
+                        backgroundColor: ["#51cf66", "#fcc419"],
+                        hoverOffset: 10,
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    plugins: {
+                        legend: { position: "bottom" }
+                    }
+                }
+            });
+        } catch (err) {
+            document.getElementById("stats").innerHTML = `<p class='text-danger'>❌ ${err.message}</p>`;
+        }
+    }
+
+    // 🔹 Cập nhật hồ sơ cá nhân
+    document.getElementById("updateForm").addEventListener("submit", async e => {
+        e.preventDefault();
+        const body = {
+            fullName: document.getElementById("inputFullName").value,
+            phoneNumber: document.getElementById("inputPhone").value
+        };
+
+        Swal.fire({
+            title: "Xác nhận cập nhật?",
+            text: "Bạn có chắc muốn lưu thay đổi?",
+            icon: "question",
+            showCancelButton: true,
+            confirmButtonText: "💾 Lưu",
+            cancelButtonText: "Hủy",
+            confirmButtonColor: "#4c6ef5"
+        }).then(async (result) => {
+            if (!result.isConfirmed) return;
+            try {
+                const res = await fetch(apiUser, {
+                    method: "PUT",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${token}`
+                    },
+                    body: JSON.stringify(body)
+                });
+
+                if (res.ok) {
+                    Swal.fire({
+                        icon: "success",
+                        title: "Cập nhật thành công!",
+                        timer: 1500,
+                        showConfirmButton: false
+                    });
+                    loadProfile();
+                } else {
+                    Swal.fire({ icon: "error", title: "❌ Lỗi khi cập nhật!" });
+                }
+            } catch (err) {
+                Swal.fire({ icon: "error", title: "Lỗi kết nối!", text: err.message });
+            }
+        });
+    });
+
+    loadProfile();
+    loadStats();
+</script>

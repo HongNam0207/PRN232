@@ -15,8 +15,6 @@ public partial class HomeTaskManagementDbContext : DbContext
     {
     }
 
-    public virtual DbSet<ActivityLog> ActivityLogs { get; set; }
-
     public virtual DbSet<Attachment> Attachments { get; set; }
 
     public virtual DbSet<Comment> Comments { get; set; }
@@ -24,8 +22,6 @@ public partial class HomeTaskManagementDbContext : DbContext
     public virtual DbSet<Family> Families { get; set; }
 
     public virtual DbSet<FamilyMember> FamilyMembers { get; set; }
-
-    public virtual DbSet<Notification> Notifications { get; set; }
 
     public virtual DbSet<Project> Projects { get; set; }
 
@@ -39,32 +35,15 @@ public partial class HomeTaskManagementDbContext : DbContext
 
     public virtual DbSet<User> Users { get; set; }
 
-    public virtual DbSet<UserPerformance> UserPerformances { get; set; }
-
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        => optionsBuilder.UseSqlServer("Name=ConnectionStrings:MyCnn");
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
+        => optionsBuilder.UseSqlServer("Server=DESKTOP-8E7SLDD;Database=HomeTaskManagementDB;Trusted_Connection=True;TrustServerCertificate=True;");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<ActivityLog>(entity =>
-        {
-            entity.HasKey(e => e.LogId).HasName("PK__Activity__5E5486489D2B01CE");
-
-            entity.Property(e => e.Action).HasMaxLength(100);
-            entity.Property(e => e.CreatedAt)
-                .HasDefaultValueSql("(getdate())")
-                .HasColumnType("datetime");
-            entity.Property(e => e.Description).HasMaxLength(255);
-            entity.Property(e => e.Entity).HasMaxLength(50);
-
-            entity.HasOne(d => d.User).WithMany(p => p.ActivityLogs)
-                .HasForeignKey(d => d.UserId)
-                .HasConstraintName("FK__ActivityL__UserI__5535A963");
-        });
-
         modelBuilder.Entity<Attachment>(entity =>
         {
-            entity.HasKey(e => e.AttachmentId).HasName("PK__Attachme__442C64BE3F8EDDEC");
+            entity.HasKey(e => e.AttachmentId).HasName("PK__Attachme__442C64BE53B838F5");
 
             entity.Property(e => e.FileType).HasMaxLength(50);
             entity.Property(e => e.FileUrl).HasMaxLength(255);
@@ -74,16 +53,16 @@ public partial class HomeTaskManagementDbContext : DbContext
 
             entity.HasOne(d => d.Task).WithMany(p => p.Attachments)
                 .HasForeignKey(d => d.TaskId)
-                .HasConstraintName("FK__Attachmen__TaskI__59063A47");
+                .HasConstraintName("FK__Attachmen__TaskI__5165187F");
 
             entity.HasOne(d => d.UploadedByNavigation).WithMany(p => p.Attachments)
                 .HasForeignKey(d => d.UploadedBy)
-                .HasConstraintName("FK__Attachmen__Uploa__59FA5E80");
+                .HasConstraintName("FK__Attachmen__Uploa__52593CB8");
         });
 
         modelBuilder.Entity<Comment>(entity =>
         {
-            entity.HasKey(e => e.CommentId).HasName("PK__Comments__C3B4DFCA292116FB");
+            entity.HasKey(e => e.CommentId).HasName("PK__Comments__C3B4DFCAF09CC892");
 
             entity.Property(e => e.CreatedAt)
                 .HasDefaultValueSql("(getdate())")
@@ -91,31 +70,34 @@ public partial class HomeTaskManagementDbContext : DbContext
 
             entity.HasOne(d => d.Task).WithMany(p => p.Comments)
                 .HasForeignKey(d => d.TaskId)
-                .HasConstraintName("FK__Comments__TaskId__46E78A0C");
+                .HasConstraintName("FK__Comments__TaskId__47DBAE45");
 
             entity.HasOne(d => d.User).WithMany(p => p.Comments)
                 .HasForeignKey(d => d.UserId)
-                .HasConstraintName("FK__Comments__UserId__47DBAE45");
+                .HasConstraintName("FK__Comments__UserId__48CFD27E");
         });
 
         modelBuilder.Entity<Family>(entity =>
         {
-            entity.HasKey(e => e.FamilyId).HasName("PK__Families__41D82F6BB6028E26");
+            entity.HasKey(e => e.FamilyId).HasName("PK__Families__41D82F6B97761CAB");
+
+            entity.HasIndex(e => e.FamilyCode, "UQ__Families__81C8AB4F816BB59A").IsUnique();
 
             entity.Property(e => e.Address).HasMaxLength(200);
             entity.Property(e => e.CreatedAt)
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime");
+            entity.Property(e => e.FamilyCode).HasMaxLength(20);
             entity.Property(e => e.FamilyName).HasMaxLength(100);
 
             entity.HasOne(d => d.CreatedByNavigation).WithMany(p => p.Families)
                 .HasForeignKey(d => d.CreatedBy)
-                .HasConstraintName("FK__Families__Create__2C3393D0");
+                .HasConstraintName("FK__Families__Create__2D27B809");
         });
 
         modelBuilder.Entity<FamilyMember>(entity =>
         {
-            entity.HasKey(e => e.MemberId).HasName("PK__FamilyMe__0CF04B1847E097ED");
+            entity.HasKey(e => e.MemberId).HasName("PK__FamilyMe__0CF04B18C01DD63C");
 
             entity.Property(e => e.JoinDate)
                 .HasDefaultValueSql("(getdate())")
@@ -124,32 +106,16 @@ public partial class HomeTaskManagementDbContext : DbContext
 
             entity.HasOne(d => d.Family).WithMany(p => p.FamilyMembers)
                 .HasForeignKey(d => d.FamilyId)
-                .HasConstraintName("FK__FamilyMem__Famil__300424B4");
+                .HasConstraintName("FK__FamilyMem__Famil__30F848ED");
 
             entity.HasOne(d => d.User).WithMany(p => p.FamilyMembers)
                 .HasForeignKey(d => d.UserId)
-                .HasConstraintName("FK__FamilyMem__UserI__30F848ED");
-        });
-
-        modelBuilder.Entity<Notification>(entity =>
-        {
-            entity.HasKey(e => e.NotificationId).HasName("PK__Notifica__20CF2E12EE928799");
-
-            entity.Property(e => e.CreatedAt)
-                .HasDefaultValueSql("(getdate())")
-                .HasColumnType("datetime");
-            entity.Property(e => e.IsRead).HasDefaultValue(false);
-            entity.Property(e => e.Message).HasMaxLength(255);
-            entity.Property(e => e.Type).HasMaxLength(50);
-
-            entity.HasOne(d => d.User).WithMany(p => p.Notifications)
-                .HasForeignKey(d => d.UserId)
-                .HasConstraintName("FK__Notificat__UserI__4BAC3F29");
+                .HasConstraintName("FK__FamilyMem__UserI__31EC6D26");
         });
 
         modelBuilder.Entity<Project>(entity =>
         {
-            entity.HasKey(e => e.ProjectId).HasName("PK__Projects__761ABEF04AC3395E");
+            entity.HasKey(e => e.ProjectId).HasName("PK__Projects__761ABEF02C619D63");
 
             entity.Property(e => e.CreatedAt)
                 .HasDefaultValueSql("(getdate())")
@@ -162,16 +128,16 @@ public partial class HomeTaskManagementDbContext : DbContext
 
             entity.HasOne(d => d.CreatedByNavigation).WithMany(p => p.Projects)
                 .HasForeignKey(d => d.CreatedBy)
-                .HasConstraintName("FK__Projects__Create__36B12243");
+                .HasConstraintName("FK__Projects__Create__37A5467C");
 
             entity.HasOne(d => d.Family).WithMany(p => p.Projects)
                 .HasForeignKey(d => d.FamilyId)
-                .HasConstraintName("FK__Projects__Family__34C8D9D1");
+                .HasConstraintName("FK__Projects__Family__35BCFE0A");
         });
 
         modelBuilder.Entity<Reward>(entity =>
         {
-            entity.HasKey(e => e.RewardId).HasName("PK__Rewards__825015B9792A92E7");
+            entity.HasKey(e => e.RewardId).HasName("PK__Rewards__825015B9F99DF18D");
 
             entity.Property(e => e.Badge).HasMaxLength(100);
             entity.Property(e => e.Description).HasMaxLength(255);
@@ -182,19 +148,19 @@ public partial class HomeTaskManagementDbContext : DbContext
 
             entity.HasOne(d => d.User).WithMany(p => p.Rewards)
                 .HasForeignKey(d => d.UserId)
-                .HasConstraintName("FK__Rewards__UserId__5070F446");
+                .HasConstraintName("FK__Rewards__UserId__4CA06362");
         });
 
         modelBuilder.Entity<Role>(entity =>
         {
-            entity.HasKey(e => e.RoleId).HasName("PK__Roles__8AFACE1A2D30EA81");
+            entity.HasKey(e => e.RoleId).HasName("PK__Roles__8AFACE1AF169D94C");
 
             entity.Property(e => e.RoleName).HasMaxLength(50);
         });
 
         modelBuilder.Entity<Task>(entity =>
         {
-            entity.HasKey(e => e.TaskId).HasName("PK__Tasks__7C6949B11C54C60A");
+            entity.HasKey(e => e.TaskId).HasName("PK__Tasks__7C6949B17AF33DE3");
 
             entity.Property(e => e.CreatedAt)
                 .HasDefaultValueSql("(getdate())")
@@ -209,20 +175,20 @@ public partial class HomeTaskManagementDbContext : DbContext
 
             entity.HasOne(d => d.CreatedByNavigation).WithMany(p => p.Tasks)
                 .HasForeignKey(d => d.CreatedBy)
-                .HasConstraintName("FK__Tasks__CreatedBy__3D5E1FD2");
+                .HasConstraintName("FK__Tasks__CreatedBy__3E52440B");
 
             entity.HasOne(d => d.Family).WithMany(p => p.Tasks)
                 .HasForeignKey(d => d.FamilyId)
-                .HasConstraintName("FK__Tasks__FamilyId__3A81B327");
+                .HasConstraintName("FK__Tasks__FamilyId__3B75D760");
 
             entity.HasOne(d => d.Project).WithMany(p => p.Tasks)
                 .HasForeignKey(d => d.ProjectId)
-                .HasConstraintName("FK__Tasks__ProjectId__3B75D760");
+                .HasConstraintName("FK__Tasks__ProjectId__3C69FB99");
         });
 
         modelBuilder.Entity<TaskAssignment>(entity =>
         {
-            entity.HasKey(e => e.AssignmentId).HasName("PK__TaskAssi__32499E779686F9EF");
+            entity.HasKey(e => e.AssignmentId).HasName("PK__TaskAssi__32499E77B8C54711");
 
             entity.Property(e => e.AssignedAt)
                 .HasDefaultValueSql("(getdate())")
@@ -232,18 +198,18 @@ public partial class HomeTaskManagementDbContext : DbContext
 
             entity.HasOne(d => d.Task).WithMany(p => p.TaskAssignments)
                 .HasForeignKey(d => d.TaskId)
-                .HasConstraintName("FK__TaskAssig__TaskI__412EB0B6");
+                .HasConstraintName("FK__TaskAssig__TaskI__4222D4EF");
 
             entity.HasOne(d => d.User).WithMany(p => p.TaskAssignments)
                 .HasForeignKey(d => d.UserId)
-                .HasConstraintName("FK__TaskAssig__UserI__4222D4EF");
+                .HasConstraintName("FK__TaskAssig__UserI__4316F928");
         });
 
         modelBuilder.Entity<User>(entity =>
         {
-            entity.HasKey(e => e.UserId).HasName("PK__Users__1788CC4C032ECD74");
+            entity.HasKey(e => e.UserId).HasName("PK__Users__1788CC4CADCA9D86");
 
-            entity.HasIndex(e => e.Email, "UQ__Users__A9D1053481B4E698").IsUnique();
+            entity.HasIndex(e => e.Email, "UQ__Users__A9D10534505BB7D4").IsUnique();
 
             entity.Property(e => e.CreatedAt)
                 .HasDefaultValueSql("(getdate())")
@@ -257,27 +223,6 @@ public partial class HomeTaskManagementDbContext : DbContext
             entity.HasOne(d => d.Role).WithMany(p => p.Users)
                 .HasForeignKey(d => d.RoleId)
                 .HasConstraintName("FK__Users__RoleId__276EDEB3");
-        });
-
-        modelBuilder.Entity<UserPerformance>(entity =>
-        {
-            entity.HasKey(e => e.PerformanceId).HasName("PK__UserPerf__F9606E01B2657595");
-
-            entity.ToTable("UserPerformance");
-
-            entity.Property(e => e.AvgCompletionTimeHours)
-                .HasDefaultValue(0.0)
-                .HasColumnName("AvgCompletionTime_Hours");
-            entity.Property(e => e.CalculatedAt)
-                .HasDefaultValueSql("(getdate())")
-                .HasColumnType("datetime");
-            entity.Property(e => e.CompletedTasks).HasDefaultValue(0);
-            entity.Property(e => e.OverdueTasks).HasDefaultValue(0);
-            entity.Property(e => e.TotalTasks).HasDefaultValue(0);
-
-            entity.HasOne(d => d.User).WithMany(p => p.UserPerformances)
-                .HasForeignKey(d => d.UserId)
-                .HasConstraintName("FK__UserPerfo__UserI__5DCAEF64");
         });
 
         OnModelCreatingPartial(modelBuilder);

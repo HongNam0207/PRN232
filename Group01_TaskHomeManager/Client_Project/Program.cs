@@ -1,11 +1,18 @@
 ﻿var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+// ==================================================
+// ✅ Đăng ký các dịch vụ cần thiết
+// ==================================================
 builder.Services.AddRazorPages();
+
+// ✅ Cho phép inject IHttpContextAccessor trong Razor
+builder.Services.AddHttpContextAccessor();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+// ==================================================
+// ✅ Cấu hình pipeline HTTP
+// ==================================================
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Error");
@@ -19,7 +26,7 @@ app.UseRouting();
 
 app.UseAuthorization();
 
-// ✅ Khi chạy, tự động redirect về trang /Author/Login
+// ✅ Khi chạy lần đầu, tự động chuyển về trang Login
 app.MapGet("/", context =>
 {
     context.Response.Redirect("/Auth/Login");

@@ -1,0 +1,148 @@
+﻿@page
+@model dynamic
+@{
+    ViewData["Title"] = "Tạo gia đình mới";
+}
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+<style>
+    body {
+        font-family: 'Inter', sans-serif;
+        background: linear-gradient(180deg, #f8faff 0%, #eef2fb 100%);
+        min-height: 100vh;
+    }
+
+    .header-bar {
+        background: linear-gradient(90deg, #4c6ef5, #5f8efb);
+        border-radius: 12px;
+        color: white;
+        padding: 1.2rem 1.6rem;
+        margin-top: 2rem;
+        margin-bottom: 1.5rem;
+        box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+    }
+
+        .header-bar h3 {
+            margin: 0;
+            font-weight: 600;
+        }
+
+    .form-card {
+        background: #fff;
+        border-radius: 16px;
+        padding: 2rem;
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+    }
+
+    label {
+        font-weight: 500;
+        color: #343a40;
+    }
+
+    .form-control {
+        border-radius: 10px;
+        padding: 0.75rem;
+        border: 1px solid #ced4da;
+        transition: 0.2s ease;
+    }
+
+        .form-control:focus {
+            border-color: #4c6ef5;
+            box-shadow: 0 0 0 0.25rem rgba(76, 110, 245, 0.15);
+        }
+
+    .btn-success {
+        background: linear-gradient(90deg, #4c6ef5, #5f8efb);
+        border: none;
+        font-weight: 600;
+    }
+
+        .btn-success:hover {
+            background: linear-gradient(90deg, #3b5bdb, #4263eb);
+        }
+
+    .btn-secondary {
+        font-weight: 500;
+    }
+</style>
+
+<div class="container">
+    <div class="header-bar d-flex justify-content-between align-items-center">
+        <h3>👨‍👩‍👧‍👦 Tạo gia đình mới</h3>
+        <a href="/Dashboard/Index" class="btn btn-light btn-sm shadow-sm">⬅ Quay lại</a>
+    </div>
+
+    <div class="form-card mx-auto" style="max-width: 600px;">
+        <form id="familyForm">
+            <div class="mb-3">
+                <label for="familyName" class="form-label">Tên gia đình <span class="text-danger">*</span></label>
+                <input type="text" id="familyName" class="form-control" placeholder="Nhập tên gia đình" required />
+            </div>
+
+            <div class="mb-3">
+                <label for="address" class="form-label">Địa chỉ</label>
+                <input type="text" id="address" class="form-control" placeholder="Nhập địa chỉ (nếu có)" />
+            </div>
+
+            <div class="d-flex gap-2 mt-4">
+                <button type="submit" class="btn btn-success w-100">💾 Lưu gia đình</button>
+                <a href="/Dashboard/Index" class="btn btn-secondary w-50">⬅ Quay lại</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+    const token = localStorage.getItem("token");
+    if (!token) window.location.href = "/Auth/Login";
+
+    document.getElementById("familyForm").addEventListener("submit", async e => {
+        e.preventDefault();
+        const data = {
+            familyName: document.getElementById("familyName").value,
+            address: document.getElementById("address").value
+        };
+
+        try {
+            const res = await fetch("https://localhost:7145/api/Families", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`
+                },
+                body: JSON.stringify(data)
+            });
+
+            if (res.ok) {
+                Swal.fire({
+                    icon: "success",
+                    title: "Tạo thành công!",
+                    text: "Gia đình mới đã được thêm vào hệ thống.",
+                    confirmButtonColor: "#4c6ef5"
+                }).then(() => window.location.href = "/Dashboard/Index");
+            } else {
+                Swal.fire({
+                    icon: "error",
+                    title: "Không thể tạo gia đình!",
+                    text: "Vui lòng kiểm tra lại thông tin và thử lại.",
+                    confirmButtonColor: "#d33"
+                });
+            }
+        } catch (err) {
+            console.error(err);
+            Swal.fire({
+                icon: "warning",
+                title: "Lỗi kết nối!",
+                text: "Không thể kết nối tới máy chủ.",
+                confirmButtonColor: "#d33"
+            });
+        }
+    });
+</script>
+
+<!-- Thư viện SweetAlert2 để hiển thị thông báo đẹp hơn -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>

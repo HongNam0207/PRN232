@@ -1,297 +1,233 @@
 ﻿@page
 @model dynamic
 @{
-    ViewData["Title"] = "Quản lý công việc gia đình";
+    ViewData["Title"] = "Danh sách công việc";
 }
 
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet" />
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-<div class="container mt-4">
-    <div class="d-flex justify-content-between align-items-center mb-3">
-        <h3>🧾 Danh sách công việc trong gia đình</h3>
-        <button class="btn btn-secondary" onclick="window.history.back()">⬅ Quay lại</button>
-    </div>
+<style>
+    body {
+        font-family: 'Inter', sans-serif;
+        background: linear-gradient(180deg, #f8faff 0%, #eef2fb 100%);
+        min-height: 100vh;
+    }
 
-    <!-- Danh sách công việc -->
-    <div id="taskList" class="list-group mb-4">
-        <p class="text-muted text-center">⏳ Đang tải dữ liệu...</p>
-    </div>
+    .header-bar {
+        background: linear-gradient(90deg, #4c6ef5, #5f8efb);
+        border-radius: 12px;
+        color: white;
+        padding: 1.2rem 1.6rem;
+        margin-top: 2rem;
+        margin-bottom: 1.5rem;
+        box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+    }
 
-    <!-- Form thêm mới -->
-    <div class="card p-3 shadow-sm">
-        <h5 class="mb-3">➕ Thêm công việc mới</h5>
-        <form id="taskForm">
-            <div class="mb-2">
-                <label class="form-label">Tiêu đề</label>
-                <input type="text" id="title" class="form-control" required />
-            </div>
-            <div class="mb-2">
-                <label class="form-label">Mô tả</label>
-                <textarea id="description" class="form-control" rows="2"></textarea>
-            </div>
-            <div class="mb-2">
-                <label class="form-label">Ngày hết hạn</label>
-                <input type="date" id="dueDate" class="form-control" />
-            </div>
-            <div class="mb-2">
-                <label class="form-label">Giao cho</label>
-                <select id="assignedUser" class="form-select">
-                    <option value="">-- Chọn thành viên --</option>
-                </select>
-            </div>
+        .header-bar h3 {
+            margin: 0;
+            font-weight: 600;
+        }
 
-            <button type="submit" class="btn btn-success w-100 mt-2">💾 Lưu công việc</button>
-            <div id="formMsg" class="text-center small mt-2"></div>
-        </form>
-    </div>
-</div>
+    .task-card {
+        border: none;
+        border-radius: 16px;
+        box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+        padding: 1.5rem;
+        margin-bottom: 1.5rem;
+        background-color: #fff;
+        transition: transform 0.15s ease;
+    }
 
-<!-- Modal chỉnh sửa -->
-<div class="modal fade" id="editModal" tabindex="-1">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">✏️ Chỉnh sửa công việc</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
-            <div class="modal-body">
-                <form id="editForm">
-                    <input type="hidden" id="editId">
-                    <div class="mb-2">
-                        <label class="form-label">Tiêu đề</label>
-                        <input type="text" id="editTitle" class="form-control" required />
-                    </div>
-                    <div class="mb-2">
-                        <label class="form-label">Mô tả</label>
-                        <textarea id="editDescription" class="form-control" rows="2"></textarea>
-                    </div>
-                    <div class="mb-2">
-                        <label class="form-label">Ngày hết hạn</label>
-                        <input type="date" id="editDueDate" class="form-control" />
-                    </div>
-                </form>
-                <div id="editMsg" class="text-center small mt-2"></div>
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
-                <button class="btn btn-primary" id="saveEditBtn">💾 Lưu thay đổi</button>
-            </div>
+        .task-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+        }
+
+    .task-title {
+        font-weight: 600;
+    }
+
+        .task-title.completed {
+            text-decoration: line-through;
+            color: #28a745;
+        }
+
+    .comment-box {
+        border-top: 1px solid #e9ecef;
+        padding-top: 1rem;
+        margin-top: 1rem;
+    }
+
+    .comment {
+        background-color: #f8f9fa;
+        border-radius: 8px;
+        padding: 0.5rem 0.75rem;
+        margin-bottom: 0.5rem;
+    }
+
+        .comment small {
+            font-size: 0.8rem;
+            color: #6c757d;
+        }
+
+    .btn-outline-primary, .btn-outline-success {
+        font-weight: 500;
+    }
+
+    .empty-text {
+        text-align: center;
+        color: #6c757d;
+        font-style: italic;
+    }
+</style>
+
+<div class="container">
+    <div class="header-bar d-flex justify-content-between align-items-center">
+        <h3>🧾 Danh sách công việc</h3>
+        <div>
+            <a href="/Families/Create?familyId=@Request.Query["familyId"]" class="btn btn-light btn-sm shadow-sm me-2">
+                ➕ Thêm công việc
+            </a>
+            <button class="btn btn-light btn-sm shadow-sm" onclick="window.history.back()">⬅ Quay lại</button>
         </div>
     </div>
+
+    <div id="taskList" class="mb-4">
+        <p class="text-center text-muted">⏳ Đang tải dữ liệu...</p>
+    </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 <script>
     const token = localStorage.getItem("token");
-    if (!token) {
-        alert("Vui lòng đăng nhập lại!");
-        window.location.href = "/Auth/Login";
-    }
-
-    const params = new URLSearchParams(window.location.search);
-    const familyId = params.get("familyId");
-
+    const familyId = new URLSearchParams(window.location.search).get("familyId");
     const apiTasks = "https://localhost:7145/api/Tasks";
-    const apiMembers = "https://localhost:7145/api/FamilyMembers";
-    const apiAssign = "https://localhost:7145/api/TaskAssignments";
+    const apiComments = "https://localhost:7145/api/Comments";
 
-    const listDiv = document.getElementById("taskList");
-    const form = document.getElementById("taskForm");
-    const msg = document.getElementById("formMsg");
-    const userSelect = document.getElementById("assignedUser");
-    const editModal = new bootstrap.Modal(document.getElementById('editModal'));
+    async function loadTasks() {
+        const listDiv = document.getElementById("taskList");
+        listDiv.innerHTML = `<p class='text-center text-muted'>⏳ Đang tải dữ liệu...</p>`;
 
-    // ===================== 1️⃣ Load thành viên gia đình =====================
-    async function loadMembers() {
         try {
-            const res = await fetch(`${apiMembers}?familyId=${familyId}`, {
+            const res = await fetch(`${apiTasks}?familyId=${familyId}`, {
                 headers: { "Authorization": `Bearer ${token}` }
             });
+
+            if (!res.ok) throw new Error("Không thể tải công việc");
             const data = await res.json();
 
-            userSelect.innerHTML = `<option value="">-- Chọn thành viên --</option>`;
-            data.forEach(m => {
-                userSelect.innerHTML += `<option value="${m.userId}">${m.fullName}</option>`;
-            });
+            if (!data || data.length === 0) {
+                listDiv.innerHTML = "<p class='empty-text'>Chưa có công việc nào.</p>";
+                return;
+            }
+
+            listDiv.innerHTML = data.map(t => `
+                <div class="task-card">
+                    <div class="d-flex justify-content-between align-items-start flex-wrap">
+                        <div class="me-auto">
+                            <h6 class="task-title ${t.status === 'Completed' ? 'completed' : ''}">
+                                ${t.title}
+                            </h6>
+                            <p class="text-muted mb-1">${t.description || "Không có mô tả"}</p>
+                            <p class="mb-1">
+                                📅 <b>Hạn:</b> ${t.dueDate ? new Date(t.dueDate).toLocaleDateString('vi-VN') : "Không có"}
+                            </p>
+                            <p class="mb-0">
+                                👤 <b>Người nhận:</b>
+                                ${t.assignedUserNames && t.assignedUserNames.length > 0
+                                    ? t.assignedUserNames.join(", ")
+                                    : "<span class='text-secondary'>Chưa giao</span>"}
+                            </p>
+                        </div>
+                        <div class="d-flex flex-wrap mt-2">
+                            <a href="/Families/Edit?id=${t.taskId}&familyId=${familyId}"
+                               class="btn btn-outline-primary btn-sm me-2">✏️ Sửa</a>
+                            <a href="/Families/Manage?id=${t.taskId}&familyId=${familyId}"
+                               class="btn btn-outline-success btn-sm">⚙️ Quản lý</a>
+                        </div>
+                    </div>
+
+                    <!-- 💬 Khu vực bình luận -->
+                    <div class="comment-box">
+                        <div id="comments-${t.taskId}" class="text-muted small mb-2">💬 Đang tải bình luận...</div>
+                        <div class="input-group input-group-sm">
+                            <input type="text" id="commentInput-${t.taskId}" class="form-control"
+                                   placeholder="Viết bình luận..." />
+                            <button class="btn btn-primary" onclick="addComment(${t.taskId})">Gửi</button>
+                        </div>
+                    </div>
+                </div>
+            `).join("");
+
+            data.forEach(t => loadComments(t.taskId));
+
         } catch (err) {
-            console.error("❌ Không thể tải thành viên:", err);
+            console.error(err);
+            listDiv.innerHTML = "<p class='text-danger text-center'>❌ Không thể tải dữ liệu.</p>";
         }
     }
 
-    // ===================== 2️⃣ Load công việc =====================
-    async function loadTasks() {
-        listDiv.innerHTML = "<p class='text-muted text-center'>⏳ Đang tải...</p>";
+    // 🗨️ Tải bình luận cho từng công việc
+    async function loadComments(taskId) {
+        const el = document.getElementById(`comments-${taskId}`);
+        try {
+            const res = await fetch(`${apiComments}/task/${taskId}`, {
+                headers: { "Authorization": `Bearer ${token}` }
+            });
+            if (!res.ok) throw new Error();
+            const data = await res.json();
 
-        const res = await fetch(`${apiTasks}?familyId=${familyId}`, {
-            headers: { "Authorization": `Bearer ${token}` }
-        });
-
-        if (!res.ok) {
-            listDiv.innerHTML = "<p class='text-danger text-center'>Không thể tải dữ liệu.</p>";
-            return;
+            if (data.length === 0) {
+                el.innerHTML = "<span class='text-muted small'>Chưa có bình luận nào.</span>";
+            } else {
+                el.innerHTML = data.map(c => `
+                    <div class="comment">
+                        <b>${c.fullName}</b>: ${c.content}
+                        <div><small>${new Date(c.createdAt).toLocaleString('vi-VN')}</small></div>
+                    </div>
+                `).join("");
+            }
+        } catch {
+            el.innerHTML = "<span class='text-danger small'>⚠️ Lỗi tải bình luận.</span>";
         }
-
-        const data = await res.json();
-        if (!data || data.length === 0) {
-            listDiv.innerHTML = "<p class='text-muted text-center'>Chưa có công việc nào.</p>";
-            return;
-        }
-
-        listDiv.innerHTML = data.map(t => `
-            <div class="list-group-item d-flex justify-content-between align-items-start flex-wrap">
-                <div class="me-auto">
-                    <h6 class="fw-bold ${t.status === 'Completed' ? 'text-success text-decoration-line-through' : ''}">
-                        ${t.title}
-                    </h6>
-                    <small class="text-muted">${t.description || "Không có mô tả"}</small><br>
-                    <small>📅 Hạn: ${t.dueDate ? new Date(t.dueDate).toLocaleDateString() : "Không có"}</small><br>
-                    <small>👤 Người nhận: ${t.assignedUserNames?.join(", ") || "Chưa giao"}</small>
-                </div>
-                <div class="text-nowrap mt-2 mt-md-0">
-                    <button class="btn btn-sm btn-outline-primary me-1" onclick="openEditModal(${t.taskId}, '${t.title}', '${t.description || ''}', '${t.dueDate ? t.dueDate.split('T')[0] : ''}')">✏️ Sửa</button>
-                    ${t.status !== 'Completed'
-                        ? `<button class="btn btn-sm btn-outline-success me-1" onclick="markDone(${t.taskId})">✅ Hoàn thành</button>`
-                        : `<button class="btn btn-sm btn-outline-warning me-1" onclick="reopenTask(${t.taskId})">↩ Mở lại</button>`
-                    }
-                    <button class="btn btn-sm btn-outline-danger" onclick="deleteTask(${t.taskId})">🗑️</button>
-                </div>
-            </div>
-        `).join("");
     }
 
-    // ===================== 3️⃣ Thêm mới và giao việc =====================
-    form.addEventListener("submit", async (e) => {
-        e.preventDefault();
-        msg.innerHTML = "";
-
-        const selectedUserId = userSelect.value;
-        const payload = {
-            title: document.getElementById("title").value.trim(),
-            description: document.getElementById("description").value.trim(),
-            dueDate: document.getElementById("dueDate").value || null,
-            familyId: familyId
-        };
+    // 💬 Thêm bình luận
+    async function addComment(taskId) {
+        const input = document.getElementById(`commentInput-${taskId}`);
+        const content = input.value.trim();
+        if (!content) return;
 
         try {
-            // 1️⃣ Tạo công việc
-            const res = await fetch(apiTasks, {
+            const res = await fetch(apiComments, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                     "Authorization": `Bearer ${token}`
                 },
-                body: JSON.stringify(payload)
+                body: JSON.stringify({ taskId, content })
             });
 
-            if (!res.ok) {
-                const err = await res.json().catch(() => ({}));
-                msg.innerHTML = `<span class='text-danger'>❌ ${err.message || "Không thể tạo công việc."}</span>`;
-                return;
-            }
-
-            const result = await res.json();
-            msg.innerHTML = "<span class='text-success'>✅ Tạo công việc thành công!</span>";
-
-            // 2️⃣ Nếu chọn người nhận thì giao việc
-            if (selectedUserId) {
-                const assignPayload = {
-                    taskId: result.taskId || result.data?.taskId,
-                    userId: parseInt(selectedUserId),
-                    progressPercent: 0
-                };
-
-                await fetch(apiAssign, {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                        "Authorization": `Bearer ${token}`
-                    },
-                    body: JSON.stringify(assignPayload)
+            if (res.ok) {
+                input.value = "";
+                loadComments(taskId);
+            } else {
+                Swal.fire({
+                    icon: "error",
+                    title: "Không thể gửi bình luận!",
+                    confirmButtonColor: "#d33"
                 });
             }
-
-            form.reset();
-            loadTasks();
         } catch (err) {
-            console.error(err);
-            msg.innerHTML = "<span class='text-danger'>❌ Lỗi hệ thống khi tạo công việc.</span>";
+            Swal.fire({
+                icon: "error",
+                title: "Lỗi kết nối!",
+                text: err.message,
+                confirmButtonColor: "#d33"
+            });
         }
-    });
-
-    // ===================== 4️⃣ CRUD khác =====================
-    function openEditModal(id, title, description, dueDate) {
-        document.getElementById("editId").value = id;
-        document.getElementById("editTitle").value = title;
-        document.getElementById("editDescription").value = description;
-        document.getElementById("editDueDate").value = dueDate;
-        document.getElementById("editMsg").innerHTML = "";
-        editModal.show();
     }
 
-    document.getElementById("saveEditBtn").addEventListener("click", async () => {
-        const id = document.getElementById("editId").value;
-        const payload = {
-            title: document.getElementById("editTitle").value,
-            description: document.getElementById("editDescription").value,
-            dueDate: document.getElementById("editDueDate").value
-        };
-
-        const res = await fetch(`${apiTasks}/${id}`, {
-            method: "PUT",
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": `Bearer ${token}`
-            },
-            body: JSON.stringify(payload)
-        });
-
-        const msgEl = document.getElementById("editMsg");
-
-        if (res.ok) {
-            msgEl.innerHTML = "<span class='text-success'>✅ Đã cập nhật công việc!</span>";
-            setTimeout(() => { editModal.hide(); loadTasks(); }, 800);
-        } else {
-            msgEl.innerHTML = "<span class='text-danger'>❌ Không thể lưu thay đổi.</span>";
-        }
-    });
-
-    async function deleteTask(id) {
-        if (!confirm("Bạn có chắc muốn xóa công việc này?")) return;
-        const res = await fetch(`${apiTasks}/${id}`, {
-            method: "DELETE",
-            headers: { "Authorization": `Bearer ${token}` }
-        });
-        if (res.ok) {
-            alert("🗑️ Đã xóa công việc.");
-            loadTasks();
-        } else alert("❌ Không thể xóa.");
-    }
-
-    async function markDone(id) {
-        await fetch(`${apiTasks}/${id}`, {
-            method: "PUT",
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": `Bearer ${token}`
-            },
-            body: JSON.stringify({ status: "Completed" })
-        });
-        loadTasks();
-    }
-
-    async function reopenTask(id) {
-        await fetch(`${apiTasks}/${id}`, {
-            method: "PUT",
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": `Bearer ${token}`
-            },
-            body: JSON.stringify({ status: "Pending" })
-        });
-        loadTasks();
-    }
-
-    // ===================== 5️⃣ Khởi chạy =====================
-    loadMembers();
     loadTasks();
 </script>

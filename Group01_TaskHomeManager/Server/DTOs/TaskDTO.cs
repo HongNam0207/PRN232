@@ -23,8 +23,10 @@ namespace Server.DTOs
         public string? Status { get; set; }   // Pending / Doing / Done
 
         public DateTime? DueDate { get; set; }
-
         public DateTime? CreatedAt { get; set; }
+
+        // 🔹 Liên kết tới gia đình
+        public int? FamilyId { get; set; }
 
         // 🔹 Danh sách người được giao (vì 1 Task có thể nhiều người)
         public List<int?>? AssignedUserIds { get; set; }     // ✅ dùng int? để tương thích DB
@@ -43,10 +45,14 @@ namespace Server.DTOs
         [MaxLength(500)]
         public string? Description { get; set; }
 
-        // ✅ có thể nhiều người được giao
-        public List<int?>? AssignedUserIds { get; set; } = new();
-
         public DateTime? DueDate { get; set; }
+
+        // ✅ Gia đình mà công việc thuộc về
+        [Required(ErrorMessage = "Cần chỉ định FamilyId.")]
+        public int? FamilyId { get; set; }
+
+        // ✅ Có thể nhiều người được giao
+        public List<int?>? AssignedUserIds { get; set; } = new();
     }
 
     // ============================================================
@@ -65,7 +71,10 @@ namespace Server.DTOs
 
         public DateTime? DueDate { get; set; }
 
-        // ✅ cập nhật danh sách người được giao
+        // ✅ Gia đình mà công việc thuộc về (nếu có thay đổi)
+        public int? FamilyId { get; set; }
+
+        // ✅ Cập nhật danh sách người được giao
         public List<int?>? AssignedUserIds { get; set; }
     }
 }

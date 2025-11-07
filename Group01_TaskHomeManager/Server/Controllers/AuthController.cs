@@ -8,7 +8,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
-// ⚙️ Tạo alias để tránh xung đột với namespace System.Security.Principal.User
+
 using UserEntity = Server.Models.User;
 
 namespace Server.Controllers
@@ -26,9 +26,7 @@ namespace Server.Controllers
             _config = config;
         }
 
-        // =====================================================
-        // 🔹 REGISTER - Đăng ký người dùng (Không mã hóa password)
-        // =====================================================
+        
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegisterRequest req)
         {
@@ -38,18 +36,17 @@ namespace Server.Controllers
             if (await _context.Users.AnyAsync(u => u.Email == req.Email))
                 return BadRequest(new { message = "Email đã được sử dụng!" });
 
-            // 🔹 Lấy RoleId cho Member từ bảng Roles (đảm bảo tồn tại)
             var memberRole = await _context.Roles.FirstOrDefaultAsync(r => r.RoleName == "Member");
             if (memberRole == null)
                 return StatusCode(500, new { message = "Không tìm thấy role 'Member' trong hệ thống!" });
 
-            // ✅ Tạo người dùng mới với Role mặc định là Member
+            
             var user = new UserEntity
             {
                 FullName = req.FullName ?? "",
                 Email = req.Email,
-                PasswordHash = req.Password, // ❗ Không mã hóa
-                RoleId = memberRole.RoleId,  // 🔸 gán động theo DB
+                PasswordHash = req.Password, 
+                RoleId = memberRole.RoleId,  
                 PhoneNumber = req.PhoneNumber,
                 IsActive = true,
                 CreatedAt = DateTime.Now
@@ -62,9 +59,7 @@ namespace Server.Controllers
         }
 
 
-        // =====================================================
-        // 🔹 LOGIN - Đăng nhập, sinh JWT token
-        // =====================================================
+    
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginRequest req)
         {
@@ -81,7 +76,6 @@ namespace Server.Controllers
             if (user.PasswordHash != req.Password)
                 return Unauthorized(new { message = "Sai mật khẩu!" });
 
-            // 🔸 Tạo JWT token
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.UTF8.GetBytes(_config["Jwt:Key"]);
 
@@ -117,9 +111,7 @@ namespace Server.Controllers
             });
         }
 
-        // =====================================================
-        // 🔐 DEMO: API yêu cầu xác thực bằng JWT
-        // =====================================================
+    
         [Authorize]
         [HttpGet("profile")]
         public async Task<IActionResult> GetProfile()

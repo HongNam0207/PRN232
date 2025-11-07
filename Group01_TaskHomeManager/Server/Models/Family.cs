@@ -7,6 +7,8 @@ public partial class Family
 {
     public int FamilyId { get; set; }
 
+    public string? FamilyCode { get; set; }
+
     public string? FamilyName { get; set; }
 
     public string? Address { get; set; }

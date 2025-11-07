@@ -1,0 +1,158 @@
+﻿@page
+@model dynamic
+@{
+    ViewData["Title"] = "Danh sách công việc";
+}
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+<style>
+    body {
+        font-family: 'Inter', sans-serif;
+        background: linear-gradient(180deg, #f8faff 0%, #eef2fb 100%);
+        min-height: 100vh;
+    }
+
+    .page-title {
+        font-weight: 700;
+        color: #2f52e0;
+        letter-spacing: 0.3px;
+    }
+
+    .header-bar {
+        background: linear-gradient(90deg, #4c6ef5, #5f8efb);
+        border-radius: 12px;
+        color: white;
+        padding: 1.2rem 1.6rem;
+        margin-bottom: 1.5rem;
+        box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+    }
+
+        .header-bar h3 {
+            margin: 0;
+            font-weight: 600;
+        }
+
+    .card {
+        border: none;
+        border-radius: 16px;
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+        background: #fff;
+    }
+
+    .task-item {
+        background: #fff;
+        border: 1px solid #e9ecef;
+        border-radius: 10px;
+        padding: 1rem 1.25rem;
+        transition: 0.25s ease;
+    }
+
+        .task-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+
+    .task-status {
+        font-size: 0.85rem;
+        padding: 0.25rem 0.6rem;
+        border-radius: 6px;
+    }
+
+    .status-pending {
+        background-color: #fff3cd;
+        color: #856404;
+    }
+
+    .status-completed {
+        background-color: #d4edda;
+        color: #155724;
+    }
+
+    .status-overdue {
+        background-color: #f8d7da;
+        color: #721c24;
+    }
+
+    .task-date {
+        color: #6c757d;
+        font-size: 0.9rem;
+    }
+
+    .placeholder-glow .placeholder {
+        border-radius: 8px;
+    }
+</style>
+
+<div class="container py-4">
+    <div class="header-bar d-flex justify-content-between align-items-center">
+        <h3>📝 Danh sách công việc của bạn</h3>
+        <a href="/Dashboard/Index" class="btn btn-light btn-sm shadow-sm">⬅ Quay lại</a>
+    </div>
+
+    <div class="card p-4">
+        <div id="taskList" class="text-center text-muted">
+            <div class="placeholder-glow">
+                <span class="placeholder col-12 mb-2"></span>
+                <span class="placeholder col-10 mb-2"></span>
+                <span class="placeholder col-8"></span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+    const token = localStorage.getItem("token");
+    if (!token) window.location.href = "/Auth/Login";
+    const apiTasks = "https://localhost:7145/api/Tasks/mytasks";
+
+    document.addEventListener("DOMContentLoaded", async () => {
+        const listEl = document.getElementById("taskList");
+
+        try {
+            const res = await fetch(apiTasks, { headers: { "Authorization": `Bearer ${token}` } });
+            if (!res.ok) {
+                listEl.innerHTML = "<p class='text-danger mt-3'>❌ Không thể tải dữ liệu.</p>";
+                return;
+            }
+
+            const data = await res.json();
+            if (!data || data.length === 0) {
+                listEl.innerHTML = "<p class='text-muted mt-3'>Hiện tại bạn chưa có công việc nào được giao.</p>";
+                return;
+            }
+
+            // Sắp xếp theo ngày gần nhất
+            data.sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate));
+
+            listEl.innerHTML = data.map(t => {
+                const due = t.dueDate ? new Date(t.dueDate).toLocaleDateString('vi-VN') : "Không có";
+                const statusInfo = t.status === "Completed"
+                    ? { text: "Đã hoàn thành", cls: "status-completed", icon: "✅" }
+                    : (t.dueDate && new Date(t.dueDate) < new Date()
+                        ? { text: "Quá hạn", cls: "status-overdue", icon: "⏰" }
+                        : { text: "Đang chờ", cls: "status-pending", icon: "🕓" });
+
+                return `
+                    <div class="task-item mb-3">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h5 class="mb-1 text-primary">${t.title}</h5>
+                            <span class="task-status ${statusInfo.cls}">
+                                ${statusInfo.icon} ${statusInfo.text}
+                            </span>
+                        </div>
+                        <p class="mb-1 text-muted">${t.description || "Không có mô tả"}</p>
+                        <p class="task-date mb-0">📅 <b>Hạn:</b> ${due}</p>
+                    </div>
+                `;
+            }).join("");
+
+        } catch (err) {
+            console.error(err);
+            listEl.innerHTML = "<p class='text-danger mt-3'>⚠️ Lỗi khi tải danh sách công việc.</p>";
+        }
+    });
+</script>

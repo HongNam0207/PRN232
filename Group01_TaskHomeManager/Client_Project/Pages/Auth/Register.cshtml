@@ -128,7 +128,7 @@
         if (res.ok) {
             msg.style.color = "green";
             msg.innerText = "Đăng ký thành công!";
-            setTimeout(() => window.location.href = "/Login", 1000);
+            setTimeout(() => window.location.href = "/Auth/Login", 1000);
         } else {
             const err = await res.json().catch(() => ({}));
             msg.style.color = "red";

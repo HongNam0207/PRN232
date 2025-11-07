@@ -28,48 +28,56 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQXV0aFxSZWdpc3Rlci5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
+[D:/FPT_8/PRN232/Project/PRN232/Group01_TaskHomeManager/Client_Project/Pages/Calendar/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQ2FsZW5kYXJcSW5kZXguY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/FPT_8/PRN232/Project/PRN232/Group01_TaskHomeManager/Client_Project/Pages/Dashboard/Create.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRGFzaGJvYXJkXENyZWF0ZS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/FPT_8/PRN232/Project/PRN232/Group01_TaskHomeManager/Client_Project/Pages/Dashboard/Edit.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRGFzaGJvYXJkXEVkaXQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
 [D:/FPT_8/PRN232/Project/PRN232/Group01_TaskHomeManager/Client_Project/Pages/Dashboard/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRGFzaGJvYXJkXEluZGV4LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/FPT_8/PRN232/Project/PRN232/Group01_TaskHomeManager/Client_Project/Pages/Dashboard/Join.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRGFzaGJvYXJkXEpvaW4uY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/FPT_8/PRN232/Project/PRN232/Group01_TaskHomeManager/Client_Project/Pages/Dashboard/Profile.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRGFzaGJvYXJkXFByb2ZpbGUuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
 [D:/FPT_8/PRN232/Project/PRN232/Group01_TaskHomeManager/Client_Project/Pages/Error.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRXJyb3IuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
+[D:/FPT_8/PRN232/Project/PRN232/Group01_TaskHomeManager/Client_Project/Pages/Families/Create.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRmFtaWxpZXNcQ3JlYXRlLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/FPT_8/PRN232/Project/PRN232/Group01_TaskHomeManager/Client_Project/Pages/Families/Edit.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRmFtaWxpZXNcRWRpdC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
 [D:/FPT_8/PRN232/Project/PRN232/Group01_TaskHomeManager/Client_Project/Pages/Families/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRmFtaWxpZXNcSW5kZXguY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/FPT_8/PRN232/Project/PRN232/Group01_TaskHomeManager/Client_Project/Pages/Families/Manage.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRmFtaWxpZXNcTWFuYWdlLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
 [D:/FPT_8/PRN232/Project/PRN232/Group01_TaskHomeManager/Client_Project/Pages/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcSW5kZXguY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/FPT_8/PRN232/Project/PRN232/Group01_TaskHomeManager/Client_Project/Pages/Members/Add.cshtml]
-build_metadata.AdditionalFiles.TargetPath = UGFnZXNcTWVtYmVyc1xBZGQuY3NodG1s
-build_metadata.AdditionalFiles.CssScope = 
-
-[D:/FPT_8/PRN232/Project/PRN232/Group01_TaskHomeManager/Client_Project/Pages/Members/Edit.cshtml]
-build_metadata.AdditionalFiles.TargetPath = UGFnZXNcTWVtYmVyc1xFZGl0LmNzaHRtbA==
-build_metadata.AdditionalFiles.CssScope = 
-
-[D:/FPT_8/PRN232/Project/PRN232/Group01_TaskHomeManager/Client_Project/Pages/Members/Index.cshtml]
-build_metadata.AdditionalFiles.TargetPath = UGFnZXNcTWVtYmVyc1xJbmRleC5jc2h0bWw=
-build_metadata.AdditionalFiles.CssScope = 
-
 [D:/FPT_8/PRN232/Project/PRN232/Group01_TaskHomeManager/Client_Project/Pages/Privacy.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUHJpdmFjeS5jc2h0bWw=
-build_metadata.AdditionalFiles.CssScope = 
-
-[D:/FPT_8/PRN232/Project/PRN232/Group01_TaskHomeManager/Client_Project/Pages/Projects/Create.cshtml]
-build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUHJvamVjdHNcQ3JlYXRlLmNzaHRtbA==
-build_metadata.AdditionalFiles.CssScope = 
-
-[D:/FPT_8/PRN232/Project/PRN232/Group01_TaskHomeManager/Client_Project/Pages/Projects/Detail.cshtml]
-build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUHJvamVjdHNcRGV0YWlsLmNzaHRtbA==
-build_metadata.AdditionalFiles.CssScope = 
-
-[D:/FPT_8/PRN232/Project/PRN232/Group01_TaskHomeManager/Client_Project/Pages/Projects/Index.cshtml]
-build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUHJvamVjdHNcSW5kZXguY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
 [D:/FPT_8/PRN232/Project/PRN232/Group01_TaskHomeManager/Client_Project/Pages/Shared/_ValidationScriptsPartial.cshtml]

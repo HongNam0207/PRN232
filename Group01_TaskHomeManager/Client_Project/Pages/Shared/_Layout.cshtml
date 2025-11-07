@@ -1,4 +1,7 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor HttpContextAccessor
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -43,9 +46,9 @@
             transition: .2s;
         }
 
-        .nav-link:hover {
-            color: #4C6EF5 !important;
-        }
+            .nav-link:hover {
+                color: #4C6EF5 !important;
+            }
 
         footer {
             margin-top: 40px;
@@ -62,59 +65,61 @@
 </head>
 
 <body>
-
     <div class="container">
-        <nav class="navbar navbar-expand-lg navbar-custom">
-            <a class="navbar-brand" asp-area="" asp-page="/Index">
-                <i class="bi bi-house-heart-fill me-1"></i> Family Tasks
-            </a>
 
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
+        <!-- 🔹 CHỈ HIỂN THỊ NAVBAR nếu KHÔNG ở trang /Auth/... -->
+        @if (!HttpContextAccessor.HttpContext.Request.Path.Value.StartsWith("/Auth"))
+        {
+            <nav class="navbar navbar-expand-lg navbar-custom">
+                <a class="navbar-brand" asp-area="" asp-page="/Index">
+                    <i class="bi bi-house-heart-fill me-1"></i> Family Tasks
+                </a>
 
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
 
-                    <li class="nav-item">
-                        <a class="nav-link" asp-area="" asp-page="/Index">
-                            <i class="bi bi-grid"></i> Dashboard
-                        </a>
-                    </li>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" asp-page="/Dashboard/Index">
+                                <i class="bi bi-grid"></i> Dashboard
+                            </a>
+                        </li>
 
-                    <li class="nav-item">
-                        <a class="nav-link" asp-area="" asp-page="/Tasks/Index">
-                            <i class="bi bi-check2-circle"></i> Công việc
-                        </a>
-                    </li>
 
-                    <li class="nav-item">
-                        <a class="nav-link" asp-area="" asp-page="/Members/Index">
-                            <i class="bi bi-people"></i> Thành viên
-                        </a>
-                    </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-page="/Calendar/Index">
+                                <i class="bi bi-grid"></i> Calendar
+                            </a>
+                        </li>
 
-                    <li class="nav-item">
-                        <a class="nav-link" asp-area="" asp-page="/Settings/Index">
-                            <i class="bi bi-gear"></i> Cài đặt
-                        </a>
-                    </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-page="/Dashboard/Profile">
+                                <i class="bi bi-grid"></i> Profile
+                            </a>
+                        </li>
+                      
+                    </ul>
 
-                </ul>
-            </div>
-        </nav>
+                </div>
+            </nav>
+        }
 
         <main role="main">
             @RenderBody()
         </main>
     </div>
 
-    <footer>
-        &copy; 2025 - Family Tasks Manager | Made with ❤️ for gia đình
-    </footer>
+    <!-- 🔹 CHỈ HIỂN THỊ FOOTER nếu KHÔNG ở trang /Auth/... -->
+    @if (!HttpContextAccessor.HttpContext.Request.Path.Value.StartsWith("/Auth"))
+    {
+        <footer>
+            &copy; 2025 - Family Tasks Manager | Made with ❤️ for gia đình
+        </footer>
+    }
 
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     @await RenderSectionAsync("Scripts", required: false)
-
 </body>
 </html>

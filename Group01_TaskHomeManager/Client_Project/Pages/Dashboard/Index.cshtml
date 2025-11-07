@@ -4,56 +4,81 @@
     ViewData["Title"] = "Trang chủ gia đình";
 }
 
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet" />
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-<div class="container mt-4">
-    <div class="d-flex justify-content-between align-items-center mb-3">
+<style>
+    body {
+        font-family: 'Inter', sans-serif;
+        background: linear-gradient(180deg, #f8faff 0%, #eef2fb 100%);
+        min-height: 100vh;
+    }
+
+    .header-bar {
+        background: linear-gradient(90deg, #4c6ef5, #5f8efb);
+        border-radius: 12px;
+        color: white;
+        padding: 1.2rem 1.6rem;
+        margin-top: 2rem;
+        margin-bottom: 1.5rem;
+        box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+    }
+
+        .header-bar h3 {
+            margin: 0;
+            font-weight: 600;
+        }
+
+    .card {
+        border: none;
+        border-radius: 16px;
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+        background: #fff;
+    }
+
+    .family-item {
+        border: 1px solid #e9ecef;
+        border-radius: 10px;
+        padding: 1rem 1.25rem;
+        transition: 0.25s ease;
+    }
+
+        .family-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+
+    .btn-sm {
+        font-weight: 500;
+    }
+
+    .empty-text {
+        color: #6c757d;
+        font-size: 0.95rem;
+        text-align: center;
+        margin-top: 1rem;
+    }
+</style>
+
+<div class="container">
+    <div class="header-bar d-flex justify-content-between align-items-center">
         <h3>🏠 Xin chào, <span id="username"></span>!</h3>
-        <button class="btn btn-outline-danger" id="logoutBtn">Đăng xuất</button>
+        <button class="btn btn-light btn-sm shadow-sm" id="logoutBtn">🚪 Đăng xuất</button>
     </div>
 
-    <div class="row g-4">
-        <div class="col-md-8 offset-md-2">
-            <div class="card shadow-sm">
-                <div class="card-body text-center">
-                    <h5 class="card-title">👨‍👩‍👧‍👦 Gia đình của bạn</h5>
-                    <div id="familyInfo" class="mt-3 small text-muted">⏳ Đang tải thông tin...</div>
-                    <button class="btn btn-primary btn-sm mt-3" id="btnAdd">➕ Tạo gia đình mới</button>
-                    <button class="btn btn-secondary btn-sm mt-3" id="btnBack" style="display:none;">⬅ Quay lại danh sách</button>
-                </div>
+    <div class="card p-4 mx-auto" style="max-width: 800px;">
+        <div class="card-body text-center">
+            <h5 class="card-title mb-3">👨‍👩‍👧‍👦 Gia đình của bạn</h5>
+            <div id="familyInfo" class="mt-3 small text-muted">⏳ Đang tải thông tin...</div>
+            <div class="d-flex justify-content-center gap-2 mt-4">
+                <a href="/Dashboard/Create" class="btn btn-primary btn-sm">➕ Tạo gia đình mới</a>
+                <a href="/Dashboard/Join" class="btn btn-success btn-sm">🔑 Tham gia bằng mã</a>
             </div>
         </div>
     </div>
 </div>
 
-<!-- Modal: Tạo / Sửa gia đình -->
-<div class="modal fade" id="familyModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 id="modalTitle" class="modal-title">Tạo gia đình mới</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
-            <div class="modal-body">
-                <form id="familyForm">
-                    <input type="hidden" id="familyId" />
-                    <div class="mb-3">
-                        <label class="form-label">Tên gia đình</label>
-                        <input type="text" id="familyName" class="form-control" required />
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Địa chỉ</label>
-                        <input type="text" id="address" class="form-control" />
-                    </div>
-                    <div id="formMessage" class="text-center small"></div>
-                    <button type="submit" class="btn btn-success w-100">💾 Lưu</button>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 <script>
     const token = localStorage.getItem("token");
     const user = JSON.parse(localStorage.getItem("user") || "{}");
@@ -63,156 +88,108 @@
     document.getElementById("username").textContent = user.fullName || "Thành viên";
 
     document.getElementById("logoutBtn").addEventListener("click", () => {
-        localStorage.clear();
-        window.location.href = "/Auth/Login";
+        Swal.fire({
+            title: "Xác nhận đăng xuất?",
+            text: "Bạn có chắc muốn đăng xuất khỏi hệ thống?",
+            icon: "question",
+            showCancelButton: true,
+            confirmButtonText: "Đăng xuất",
+            cancelButtonText: "Hủy",
+            confirmButtonColor: "#dc3545"
+        }).then(result => {
+            if (result.isConfirmed) {
+                localStorage.clear();
+                window.location.href = "/Auth/Login";
+            }
+        });
     });
 
-    const modal = new bootstrap.Modal(document.getElementById("familyModal"));
-    const form = document.getElementById("familyForm");
-    const msg = document.getElementById("formMessage");
     const infoDiv = document.getElementById("familyInfo");
-    const btnBack = document.getElementById("btnBack");
-
-    const urlParams = new URLSearchParams(window.location.search);
-    const familyIdParam = urlParams.get("familyId");
-
-    // Nếu có familyId trong URL => hiển thị chi tiết
-    if (familyIdParam) {
-        loadFamilyDetail(familyIdParam);
-        btnBack.style.display = "block";
-        btnBack.addEventListener("click", () => {
-            window.location.href = "/Families/Index";
-        });
-    } else {
-        loadFamilies();
-    }
 
     // 🔹 Load danh sách gia đình
     async function loadFamilies() {
         infoDiv.innerHTML = "⏳ Đang tải...";
-        const res = await fetch(`${apiUrl}/myfamilies`, {
-            headers: { "Authorization": `Bearer ${token}` }
-        });
+        try {
+            const res = await fetch(`${apiUrl}/myfamilies`, {
+                headers: { "Authorization": `Bearer ${token}` }
+            });
 
-        if (!res.ok) {
-            infoDiv.innerHTML = "<p class='text-danger'>Không tải được dữ liệu.</p>";
-            return;
-        }
+            if (!res.ok) throw new Error("Không tải được dữ liệu.");
 
-        const data = await res.json();
-        if (!data || data.length === 0) {
-            infoDiv.innerHTML = `<p class='text-muted'>Chưa có gia đình nào.</p>`;
-            return;
-        }
+            const data = await res.json();
+            if (!data || data.length === 0) {
+                infoDiv.innerHTML = `<p class="empty-text">Chưa có gia đình nào được tạo hoặc tham gia.</p>`;
+                return;
+            }
 
-        infoDiv.innerHTML = data.map(f => `
-            <div class="border rounded p-3 mb-3 text-start">
-                <h5 class="mb-1">${f.familyName}</h5>
-                <p class="mb-0">📍 <b>${f.address || "Chưa có địa chỉ"}</b></p>
-                <small class="text-muted">Mối quan hệ: ${f.relationship || "Thành viên"}</small>
-                <div class="mt-2">
-                    <button class="btn btn-info btn-sm me-1" onclick="viewFamily(${f.familyId})">👁️ Xem chi tiết</button>
-                    <button class="btn btn-warning btn-sm me-1" onclick="editFamily(${f.familyId}, '${f.familyName}', '${f.address || ''}')">✏️ Sửa</button>
-                    <button class="btn btn-danger btn-sm" onclick="deleteFamily(${f.familyId})">🗑️ Xóa</button>
+            infoDiv.innerHTML = data.map(f => `
+                <div class="family-item mb-3 text-start">
+                    <h5 class="mb-1 text-primary">${f.familyName}</h5>
+                    <p class="mb-0">🏷️ <b>Mã:</b> ${f.familyCode || "Chưa có"}</p>
+                    <p class="mb-0">📍 <b>Địa chỉ:</b> ${f.address || "Chưa có địa chỉ"}</p>
+                    <small class="text-muted">👤 Vai trò: ${f.relationship || "Thành viên"}</small>
+                    <div class="mt-3">
+                        <button class="btn btn-info btn-sm me-1" onclick="viewFamily(${f.familyId})">👁️ Xem chi tiết</button>
+                        <a href="/Dashboard/Edit?id=${f.familyId}" class="btn btn-warning btn-sm me-1 text-white">✏️ Sửa</a>
+                        <button class="btn btn-danger btn-sm" onclick="deleteFamily(${f.familyId}, '${f.familyName}')">🗑️ Xóa</button>
+                    </div>
                 </div>
-            </div>
-        `).join("");
-    }
-
-    // 🔹 Xem chi tiết gia đình
-    async function loadFamilyDetail(id) {
-        infoDiv.innerHTML = "⏳ Đang tải thông tin chi tiết...";
-        const res = await fetch(`${apiUrl}/${id}`, {
-            headers: { "Authorization": `Bearer ${token}` }
-        });
-
-        if (!res.ok) {
-            infoDiv.innerHTML = "<p class='text-danger'>Không tải được thông tin chi tiết.</p>";
-            return;
+            `).join("");
+        } catch (err) {
+            infoDiv.innerHTML = `<p class="text-danger mt-2">❌ ${err.message}</p>`;
         }
-
-        const f = await res.json();
-        infoDiv.innerHTML = `
-            <div class="text-start">
-                <h4>${f.familyName}</h4>
-                <p><b>📍 Địa chỉ:</b> ${f.address || "Chưa có địa chỉ"}</p>
-                <p><b>👤 Người tạo:</b> ${f.createdByName || "Không rõ"}</p>
-                <p><b>📅 Ngày tạo:</b> ${new Date(f.createdAt).toLocaleDateString()}</p>
-            </div>
-        `;
     }
 
-    // 🔹 Chuyển hướng khi bấm “Xem chi tiết”
+    loadFamilies();
+
     function viewFamily(id) {
         window.location.href = `/Families/Index?familyId=${id}`;
     }
 
-    // 🔹 Tạo gia đình mới
-    document.getElementById("btnAdd").addEventListener("click", () => {
-        document.getElementById("modalTitle").innerText = "Tạo gia đình mới";
-        document.getElementById("familyId").value = "";
-        form.reset();
-        msg.innerHTML = "";
-        modal.show();
-    });
+    // 🔹 Xóa gia đình (hiển thị SweetAlert xác nhận)
+    async function deleteFamily(id, name) {
+        Swal.fire({
+            title: `Xóa gia đình "${name}"?`,
+            text: "Hành động này không thể hoàn tác!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "🗑️ Xóa",
+            cancelButtonText: "Hủy",
+            confirmButtonColor: "#dc3545"
+        }).then(async (result) => {
+            if (!result.isConfirmed) return;
 
-    // 🔹 Sửa gia đình
-    function editFamily(id, name, address) {
-        document.getElementById("modalTitle").innerText = "Cập nhật gia đình";
-        document.getElementById("familyId").value = id;
-        document.getElementById("familyName").value = name;
-        document.getElementById("address").value = address;
-        msg.innerHTML = "";
-        modal.show();
-    }
+            try {
+                const res = await fetch(`${apiUrl}/${id}`, {
+                    method: "DELETE",
+                    headers: { "Authorization": `Bearer ${token}` }
+                });
 
-    // 🔹 Submit (Tạo hoặc Cập nhật)
-    form.addEventListener("submit", async e => {
-        e.preventDefault();
-        const id = document.getElementById("familyId").value;
-        const payload = {
-            familyName: document.getElementById("familyName").value,
-            address: document.getElementById("address").value
-        };
-
-        const method = id ? "PUT" : "POST";
-        const url = id ? `${apiUrl}/${id}` : apiUrl;
-
-        const res = await fetch(url, {
-            method,
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": `Bearer ${token}`
-            },
-            body: JSON.stringify(payload)
+                if (res.ok) {
+                    Swal.fire({
+                        icon: "success",
+                        title: "Đã xóa thành công!",
+                        timer: 1500,
+                        showConfirmButton: false
+                    });
+                    loadFamilies();
+                } else {
+                    const err = await res.json().catch(() => ({}));
+                    Swal.fire({
+                        icon: "error",
+                        title: "Không thể xóa!",
+                        text: err.message || "Vui lòng thử lại.",
+                        confirmButtonColor: "#d33"
+                    });
+                }
+            } catch (err) {
+                Swal.fire({
+                    icon: "error",
+                    title: "Lỗi kết nối!",
+                    text: "Không thể kết nối tới máy chủ.",
+                    confirmButtonColor: "#d33"
+                });
+            }
         });
-
-        if (res.ok) {
-            msg.innerHTML = "<span class='text-success'>✅ Lưu thành công!</span>";
-            setTimeout(() => {
-                modal.hide();
-                loadFamilies();
-            }, 1000);
-        } else {
-            const err = await res.json().catch(() => ({}));
-            msg.innerHTML = `<span class='text-danger'>❌ ${err.message || "Không thể lưu."}</span>`;
-        }
-    });
-
-    // 🔹 Xóa gia đình
-    async function deleteFamily(id) {
-        if (!confirm("Bạn có chắc muốn xóa gia đình này?")) return;
-        const res = await fetch(`${apiUrl}/${id}`, {
-            method: "DELETE",
-            headers: { "Authorization": `Bearer ${token}` }
-        });
-
-        if (res.ok) {
-            alert("🗑️ Xóa thành công!");
-            loadFamilies();
-        } else {
-            const err = await res.json().catch(() => ({}));
-            alert("❌ " + (err.message || "Không thể xóa."));
-        }
     }
 </script>

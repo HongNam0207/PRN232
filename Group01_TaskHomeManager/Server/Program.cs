@@ -5,13 +5,12 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System.Text;
+using System.Text.Json.Serialization;
 using Server.Models;
 
-namespace Server // ✅ Thêm namespace bọc toàn bộ
+namespace Server
 {
-    // ============================================================
-    // 🔹 1️⃣ Class filter
-    // ============================================================
+  
     public class ODataQuerySwaggerFilter : IDocumentFilter
     {
         public void Apply(OpenApiDocument swaggerDoc, DocumentFilterContext context)
@@ -25,31 +24,36 @@ namespace Server // ✅ Thêm namespace bọc toàn bộ
         }
     }
 
-    // ============================================================
-    // 🔹 2️⃣ Bắt đầu cấu hình app
-    // ============================================================
+
     public class Program
     {
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // Controllers + OData
+          
             builder.Services.AddControllers()
-                .AddOData(opt => opt.Select().Filter().OrderBy().Expand().Count().SetMaxTop(100));
+                .AddOData(opt => opt.Select().Filter().OrderBy().Expand().Count().SetMaxTop(100))
+                .AddJsonOptions(opt =>
+                {
+                    opt.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+                    opt.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
+                });
 
-            // Database
+            
             builder.Services.AddDbContext<HomeTaskManagementDbContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("MyCnn")));
 
-            // CORS
+            
             builder.Services.AddCors(options =>
             {
                 options.AddPolicy("AllowAll", policy =>
-                    policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
+                    policy.AllowAnyOrigin()
+                          .AllowAnyHeader()
+                          .AllowAnyMethod());
             });
 
-            // JWT
+            
             builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
                 {
@@ -66,26 +70,29 @@ namespace Server // ✅ Thêm namespace bọc toàn bộ
 
             builder.Services.AddAuthorization();
 
-            // Swagger + OData info
+            
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo
                 {
-                    Title = "🏠 HomeTaskManagement API",
+                    Title = "🏠 Home Task Management API",
                     Version = "v1",
-                    Description = "API for family task management (OData + JWT + DTO)"
+                    Description = "API for managing family tasks (OData + JWT + DTO)"
                 });
 
+               
+                c.CustomSchemaIds(type => type.FullName);
+
+           
                 c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                 {
-                    Description = "Nhập đầy đủ 'Bearer {token}' vào đây (VD: Bearer eyJhbGciOi...)",
+                    Description = "Nhập đầy đủ 'Bearer {token}' (VD: Bearer eyJhbGciOi...)",
                     Name = "Authorization",
                     In = ParameterLocation.Header,
-                    Type = SecuritySchemeType.ApiKey, // ✅ đổi từ Http → ApiKey
+                    Type = SecuritySchemeType.ApiKey,
                     Scheme = "Bearer"
                 });
-
 
                 c.AddSecurityRequirement(new OpenApiSecurityRequirement
                 {
@@ -102,19 +109,19 @@ namespace Server // ✅ Thêm namespace bọc toàn bộ
                     }
                 });
 
+
                 c.DocumentFilter<ODataQuerySwaggerFilter>();
             });
 
-            // ============================================================
-            // 🔹 Build App
-            // ============================================================
             var app = builder.Build();
 
-            if (app.Environment.IsDevelopment())
+            // ✅ Bật Swagger luôn (cả Dev & Prod)
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
             {
-                app.UseSwagger();
-                app.UseSwaggerUI();
-            }
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "🏠 Home Task API v1");
+                c.DocumentTitle = "Family Tasks API Docs";
+            });
 
             app.UseHttpsRedirection();
             app.UseCors("AllowAll");
