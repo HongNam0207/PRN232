@@ -1,0 +1,22 @@
+﻿@page
+@model dynamic
+@{
+    ViewData["Title"] = "Tạo Công Việc";
+}
+<div class="container mt-4" style="max-width:500px;">
+    <h3 class="text-center mb-3">Tạo công việc</h3>
+    <input id="title" class="form-control mb-3" placeholder="Tên công việc">
+    <textarea id="desc" class="form-control mb-3" placeholder="Mô tả"></textarea>
+    <button class="btn btn-primary w-100" id="btn">Tạo</button>
+</div>
+<script>
+    btn.onclick=async()=>{
+     const token=localStorage.getItem("token");
+     await fetch(`/api/Tasks`,{
+      method:"POST",
+      headers:{Authorization:`Bearer ${token}`,"Content-Type":"application/json"},
+      body:JSON.stringify({title:title.value,description:desc.value,assignedUserIds:[]})
+     });
+     location.href="/Tasks/Index";
+    }
+</script>

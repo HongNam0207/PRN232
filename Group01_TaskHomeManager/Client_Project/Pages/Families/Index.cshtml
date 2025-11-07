@@ -1,0 +1,45 @@
+﻿@page
+@model dynamic
+@{
+    ViewData["Title"] = "Gia đình của tôi";
+}
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h3>Gia đình của tôi</h3>
+        <a href="/Families/Create" class="btn btn-primary">
+            <i class="bi bi-plus-circle"></i> Tạo gia đình
+        </a>
+    </div>
+
+    <div id="familyList" class="row g-3"></div>
+</div>
+
+<script>
+    async function loadFamilies() {
+        const token = localStorage.getItem("token");
+        const res = await fetch("https://localhost:7145/api/Families/myfamilies", {
+            headers: { "Authorization": `Bearer ${token}` }
+        });
+
+        const data = await res.json();
+        const list = document.getElementById("familyList");
+        list.innerHTML = "";
+
+        data.forEach(f => {
+            list.innerHTML += `
+                <div class="col-md-4">
+                    <div class="card shadow-sm p-3">
+                        <h5>${f.familyName}</h5>
+                        <p class="text-muted">${f.address ?? "Chưa có địa chỉ"}</p>
+                        <a href="/Families/Detail?familyId=${f.familyId}" class="btn btn-outline-primary w-100">
+                            Xem chi tiết
+                        </a>
+                    </div>
+                </div>`;
+        });
+    }
+    loadFamilies();
+</script>

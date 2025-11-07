@@ -1,0 +1,51 @@
+﻿@page
+@model dynamic
+@{
+    ViewData["Title"] = "Tạo Gia Đình";
+}
+
+<div class="container mt-4" style="max-width: 500px;">
+    <h3 class="mb-3 text-center">Tạo gia đình mới</h3>
+
+    <form id="createFamilyForm">
+        <label class="form-label">Tên gia đình</label>
+        <input id="familyName" class="form-control mb-3" placeholder="Nhập tên..." required>
+
+        <label class="form-label">Địa chỉ (không bắt buộc)</label>
+        <input id="address" class="form-control mb-3" placeholder="Nhập địa chỉ...">
+
+        <button class="btn btn-primary w-100">Tạo</button>
+    </form>
+
+    <p id="message" class="mt-3 text-center"></p>
+</div>
+
+<script>
+    document.getElementById("createFamilyForm").addEventListener("submit", async e => {
+        e.preventDefault();
+        const token = localStorage.getItem("token");
+
+        const res = await fetch("https://localhost:7145/api/Families", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`
+            },
+            body: JSON.stringify({
+                familyName: document.getElementById("familyName").value,
+                address: document.getElementById("address").value
+            })
+        });
+
+        const msg = document.getElementById("message");
+
+        if (res.ok) {
+            msg.style.color = "green";
+            msg.innerText = "Tạo gia đình thành công!";
+            setTimeout(() => window.location.href = "/Families/Index", 1000);
+        } else {
+            msg.style.color = "red";
+            msg.innerText = "Lỗi! Không thể tạo.";
+        }
+    });
+</script>

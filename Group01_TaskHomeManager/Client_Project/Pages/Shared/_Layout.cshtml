@@ -3,49 +3,118 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - Client_Project</title>
+    <title>@ViewData["Title"] - Family Tasks</title>
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+    <!-- Bootstrap -->
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/Client_Project.styles.css" asp-append-version="true" />
+
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
+    <!-- Custom CSS -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f7f9fc;
+        }
+
+        .navbar-custom {
+            background: white;
+            border-radius: 12px;
+            padding: 14px 28px;
+            margin-top: 15px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+        }
+
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 20px;
+            color: #4C6EF5 !important;
+        }
+
+        .nav-link {
+            font-size: 15px;
+            font-weight: 500;
+            color: #333 !important;
+            margin-right: 14px;
+            transition: .2s;
+        }
+
+        .nav-link:hover {
+            color: #4C6EF5 !important;
+        }
+
+        footer {
+            margin-top: 40px;
+            padding: 20px 0;
+            background: white;
+            border-top: 1px solid #e6e6e6;
+            text-align: center;
+        }
+
+        main {
+            margin-top: 30px;
+        }
+    </style>
 </head>
+
 <body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container">
-                <a class="navbar-brand" asp-area="" asp-page="/Index">Client_Project</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Privacy">Privacy</a>
-                        </li>
-                    </ul>
-                </div>
+
+    <div class="container">
+        <nav class="navbar navbar-expand-lg navbar-custom">
+            <a class="navbar-brand" asp-area="" asp-page="/Index">
+                <i class="bi bi-house-heart-fill me-1"></i> Family Tasks
+            </a>
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+
+                    <li class="nav-item">
+                        <a class="nav-link" asp-area="" asp-page="/Index">
+                            <i class="bi bi-grid"></i> Dashboard
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" asp-area="" asp-page="/Tasks/Index">
+                            <i class="bi bi-check2-circle"></i> Công việc
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" asp-area="" asp-page="/Members/Index">
+                            <i class="bi bi-people"></i> Thành viên
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" asp-area="" asp-page="/Settings/Index">
+                            <i class="bi bi-gear"></i> Cài đặt
+                        </a>
+                    </li>
+
+                </ul>
             </div>
         </nav>
-    </header>
-    <div class="container">
-        <main role="main" class="pb-3">
+
+        <main role="main">
             @RenderBody()
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2025 - Client_Project - <a asp-area="" asp-page="/Privacy">Privacy</a>
-        </div>
+    <footer>
+        &copy; 2025 - Family Tasks Manager | Made with ❤️ for gia đình
     </footer>
 
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
-
     @await RenderSectionAsync("Scripts", required: false)
+
 </body>
 </html>

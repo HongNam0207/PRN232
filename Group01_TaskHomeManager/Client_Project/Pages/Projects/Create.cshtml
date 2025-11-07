@@ -1,0 +1,39 @@
+﻿@page
+@model dynamic
+@{
+    ViewData["Title"] = "Tạo Dự Án";
+}
+
+<div class="container mt-4" style="max-width: 500px;">
+    <h3 class="text-center mb-3">Tạo dự án</h3>
+
+    <form id="projectForm">
+        <input id="name" class="form-control mb-3" placeholder="Tên dự án" required>
+        <textarea id="desc" class="form-control mb-3" placeholder="Mô tả"></textarea>
+        <button class="btn btn-primary w-100">Tạo</button>
+    </form>
+
+    <p id="msg" class="text-center mt-3"></p>
+</div>
+
+<script>
+    document.getElementById("projectForm").addEventListener("submit", async e => {
+        e.preventDefault();
+        const token = localStorage.getItem("token");
+
+        const res = await fetch("https://localhost:7145/api/Projects", {
+            method: "POST",
+            headers: { "Content-Type": "application/json", "Authorization": `Bearer ${token}` },
+            body: JSON.stringify({
+                projectName: name.value,
+                description: desc.value
+            })
+        });
+
+        if(res.ok){
+            msg.style.color = "green";
+            msg.innerText = "Tạo dự án thành công!";
+            setTimeout(()=>location.href="/Projects/Index",800);
+        }
+    });
+</script>

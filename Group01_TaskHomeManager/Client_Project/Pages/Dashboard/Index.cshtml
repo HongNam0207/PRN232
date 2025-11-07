@@ -1,0 +1,26 @@
+﻿@page
+@model dynamic
+@{
+    ViewData["Title"] = "Dashboard";
+}
+<div class="container mt-4">
+    <h3 class="mb-4">Tổng quan</h3>
+    <div class="row">
+        <div class="col-md-4"><div class="card p-3 shadow-sm" id="taskCount"></div></div>
+        <div class="col-md-4"><div class="card p-3 shadow-sm" id="projectCount"></div></div>
+        <div class="col-md-4"><div class="card p-3 shadow-sm" id="memberCount"></div></div>
+    </div>
+</div>
+
+<script>
+    async function load(){
+     const token=localStorage.getItem("token");
+     const t=(await (await fetch(`/api/Tasks/family`,{headers:{Authorization:`Bearer ${token}`}})).json()).length;
+     const p=(await (await fetch(`/api/Projects`,{headers:{Authorization:`Bearer ${token}`}})).json()).length;
+     const m=(await (await fetch(`/api/FamilyMembers/myfamily`,{headers:{Authorization:`Bearer ${token}`}})).json()).length;
+     taskCount.innerHTML=`<h4>${t}</h4><p>Công việc</p>`;
+     projectCount.innerHTML=`<h4>${p}</h4><p>Dự án</p>`;
+     memberCount.innerHTML=`<h4>${m}</h4><p>Thành viên</p>`;
+    }
+    load();
+</script>
